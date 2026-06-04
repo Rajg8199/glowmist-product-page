@@ -5,6 +5,8 @@
   --gm-ink: #33232a;
   --gm-muted: #6d5961;
   --gm-cream: #fff8f6;
+  --gm-radius: 18px;
+  --gm-transition: 0.2s ease;
   background: var(--gm-cream);
   color: var(--gm-ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -492,10 +494,6 @@
     min-height: auto;
   }
 
-  .glowmist-hero-media {
-    order: -1;
-  }
-
   .glowmist-benefits,
   .glowmist-reviews {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -527,5 +525,437 @@
   .glowmist-sticky .glowmist-button {
     min-width: 132px;
     padding: 0 14px;
+  }
+}
+
+/* GlowMist hero conversion styling and carousel */
+.glowmist-hero {
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+  max-width: 1280px;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.glowmist-hero-content {
+  order: 1;
+}
+
+.glowmist-hero-media {
+  order: 2;
+  position: relative;
+  align-self: center;
+  isolation: isolate;
+}
+
+.glowmist-hero-media::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  background: radial-gradient(ellipse at 50% 55%, rgba(247, 200, 206, 0.72) 0%, rgba(247, 200, 206, 0.2) 45%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(36px);
+  z-index: -1;
+}
+
+.glowmist-hero h1 {
+  font-size: clamp(2rem, 4.5vw, 3.35rem);
+  font-weight: 900;
+  line-height: 1.08;
+  max-width: 620px;
+}
+
+.glowmist-subheadline {
+  font-size: 1rem;
+  max-width: 520px;
+}
+
+.glowmist-social-proof {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0 0 22px;
+}
+
+.glowmist-stars {
+  display: flex;
+  gap: 2px;
+  color: #e8a030;
+  line-height: 1;
+}
+
+.glowmist-rating-score {
+  color: var(--gm-ink);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.glowmist-rating-count,
+.glowmist-proof-divider {
+  color: var(--gm-muted);
+  font-size: 0.84rem;
+}
+
+.glowmist-customers {
+  color: var(--gm-berry);
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.glowmist-purchase {
+  border-radius: var(--gm-radius);
+  box-shadow: 0 10px 34px rgba(143, 61, 85, 0.1);
+  gap: 14px;
+  padding: 22px;
+}
+
+.glowmist-product-name {
+  color: var(--gm-muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.glowmist-price-row {
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.glowmist-price {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.glowmist-compare-price {
+  color: var(--gm-muted);
+  font-size: 1rem;
+  text-decoration: line-through;
+}
+
+.glowmist-savings-badge {
+  background: var(--gm-berry);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 4px 9px;
+}
+
+.glowmist-offer {
+  align-items: center;
+  background: rgba(247, 200, 206, 0.3);
+  border: 1px solid var(--gm-blush);
+  color: var(--gm-berry);
+  display: inline-flex;
+  font-size: 0.8rem;
+  padding: 6px 14px;
+}
+
+.glowmist-urgency-strip {
+  align-items: center;
+  border-bottom: 1px dashed rgba(143, 61, 85, 0.16);
+  border-top: 1px dashed rgba(143, 61, 85, 0.16);
+  color: var(--gm-ink);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  font-weight: 700;
+  gap: 6px 10px;
+  padding: 10px 0;
+}
+
+.glowmist-stock-dot {
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 8px;
+  height: 8px;
+  width: 8px;
+}
+
+.glowmist-stock-dot--green {
+  background: #2f9f62;
+  box-shadow: 0 0 0 3px rgba(47, 159, 98, 0.18);
+}
+
+.glowmist-stock-dot--red {
+  background: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.16);
+}
+
+.glowmist-urgency-divider {
+  color: var(--gm-blush);
+}
+
+.glowmist-scarcity {
+  background: rgba(192, 57, 43, 0.07);
+  border-radius: 8px;
+  color: #b03226;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin: 0;
+  padding: 7px 12px;
+}
+
+.glowmist-button {
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(143, 61, 85, 0.26);
+  font-size: 0.96rem;
+  letter-spacing: 0.04em;
+  min-height: 56px;
+  text-transform: uppercase;
+}
+
+.glowmist-button:hover:not(:disabled) {
+  background: var(--gm-ink);
+  box-shadow: 0 8px 28px rgba(51, 35, 42, 0.25);
+  transform: translateY(-2px);
+}
+
+.glowmist-guarantee-strip {
+  border-top: 1px solid rgba(143, 61, 85, 0.08);
+  color: var(--gm-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.74rem;
+  font-weight: 700;
+  gap: 6px 14px;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.glowmist-hero-carousel {
+  position: relative;
+  width: min(100%, 560px);
+}
+
+.glowmist-hero-carousel__track {
+  border-radius: 16px;
+  display: grid;
+  overflow: hidden;
+  position: relative;
+}
+
+.glowmist-hero-carousel__slide {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(18px);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.glowmist-hero-carousel__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.glowmist-hero-carousel__slide:first-child {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.glowmist-hero-carousel.is-ready .glowmist-hero-carousel__slide:first-child:not(.is-active) {
+  opacity: 0;
+}
+
+.glowmist-hero-carousel img {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  box-shadow: 0 28px 80px rgba(110, 58, 70, 0.17);
+  display: block;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.glowmist-hero-carousel__caption {
+  background: rgba(255, 248, 246, 0.9);
+  border: 1px solid rgba(247, 200, 206, 0.75);
+  border-radius: 999px;
+  bottom: 18px;
+  color: var(--gm-ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+  left: 50%;
+  margin: 0;
+  max-width: calc(100% - 36px);
+  padding: 8px 14px;
+  position: absolute;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: normal;
+}
+
+.glowmist-carousel-button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(143, 61, 85, 0.16);
+  border-radius: 50%;
+  color: var(--gm-berry);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.8rem;
+  font-weight: 400;
+  height: 42px;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  z-index: 3;
+}
+
+.glowmist-carousel-button--prev {
+  left: 12px;
+}
+
+.glowmist-carousel-button--next {
+  right: 12px;
+}
+
+.glowmist-carousel-dots {
+  bottom: -26px;
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.glowmist-carousel-dot {
+  background: rgba(143, 61, 85, 0.24);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  height: 8px;
+  padding: 0;
+  width: 8px;
+}
+
+.glowmist-carousel-dot.is-active {
+  background: var(--gm-berry);
+  width: 22px;
+}
+
+.glowmist-benefit-chip {
+  align-items: center;
+  animation: gm-chip-float 4s ease-in-out infinite;
+  background: rgba(255, 248, 246, 0.92);
+  border: 1px solid rgba(247, 200, 206, 0.65);
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(143, 61, 85, 0.1);
+  color: var(--gm-ink);
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 800;
+  gap: 6px;
+  padding: 7px 14px 7px 9px;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 4;
+}
+
+.glowmist-benefit-chip__icon {
+  color: var(--gm-berry);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.glowmist-benefit-chip--tl {
+  left: -4%;
+  top: 12%;
+}
+
+.glowmist-benefit-chip--tr {
+  right: -4%;
+  top: 28%;
+}
+
+.glowmist-benefit-chip--bl {
+  bottom: 28%;
+  left: -4%;
+}
+
+.glowmist-benefit-chip--br {
+  bottom: 12%;
+  right: -4%;
+}
+
+@keyframes gm-chip-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.glowmist-mobile-benefits {
+  display: none;
+}
+
+@media (max-width: 989px) {
+  .glowmist-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .glowmist-hero-content,
+  .glowmist-hero-media {
+    order: initial;
+  }
+
+  .glowmist-hero-carousel {
+    margin: 0 auto;
+  }
+
+  .glowmist-benefit-chip {
+    display: none;
+  }
+
+  .glowmist-mobile-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .glowmist-mobile-benefit-tag {
+    background: rgba(247, 200, 206, 0.3);
+    border: 1px solid rgba(247, 200, 206, 0.6);
+    border-radius: 999px;
+    color: var(--gm-berry);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 680px) {
+  .glowmist-hero {
+    gap: 28px;
+    padding-top: 28px;
+  }
+
+  .glowmist-hero h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+
+  .glowmist-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .glowmist-guarantee-strip {
+    flex-direction: column;
+  }
+
+  .glowmist-carousel-button {
+    height: 36px;
+    width: 36px;
   }
 }

@@ -115,10 +115,78 @@
     window.addEventListener('scroll', update, { passive: true });
   };
 
+  const initCarousel = (carousel) => {
+    if (carousel.dataset.glowmistCarouselReady === 'true') return;
+    carousel.dataset.glowmistCarouselReady = 'true';
+
+    const slides = Array.from(carousel.querySelectorAll('[data-glowmist-carousel-slide]'));
+    const prev = carousel.querySelector('[data-glowmist-carousel-prev]');
+    const next = carousel.querySelector('[data-glowmist-carousel-next]');
+    const dotsRoot = carousel.querySelector('[data-glowmist-carousel-dots]');
+    let index = 0;
+    let timer;
+
+    if (!slides.length) return;
+
+    const dots = dotsRoot
+      ? slides.map((_, dotIndex) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'glowmist-carousel-dot';
+          dot.setAttribute('aria-label', `Show image ${dotIndex + 1}`);
+          dot.addEventListener('click', () => {
+            show(dotIndex);
+            restart();
+          });
+          dotsRoot.appendChild(dot);
+          return dot;
+        })
+      : [];
+
+    const show = (nextIndex) => {
+      index = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        const active = slideIndex === index;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      dots.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+      carousel.classList.add('is-ready');
+    };
+
+    const restart = () => {
+      window.clearInterval(timer);
+      if (slides.length > 1) timer = window.setInterval(() => show(index + 1), 5000);
+    };
+
+    prev?.addEventListener('click', () => {
+      show(index - 1);
+      restart();
+    });
+
+    next?.addEventListener('click', () => {
+      show(index + 1);
+      restart();
+    });
+
+    carousel.addEventListener('mouseenter', () => window.clearInterval(timer));
+    carousel.addEventListener('mouseleave', restart);
+    carousel.addEventListener('focusin', () => window.clearInterval(timer));
+    carousel.addEventListener('focusout', restart);
+
+    show(0);
+    restart();
+  };
+
   const init = () => {
     document.querySelectorAll('[data-glowmist-cart]').forEach(initCart);
     document.querySelectorAll('[data-glowmist-faq]').forEach(initFaq);
     document.querySelectorAll('[data-glowmist-sticky]').forEach(initSticky);
+    document.querySelectorAll('[data-glowmist-carousel]').forEach(initCarousel);
   };
 
   if (document.readyState === 'loading') {

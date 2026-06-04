@@ -12,6 +12,27 @@
     "glowmist_hero": {
       "type": "glowmist-hero",
       "blocks": {
+        "hero_slide_1": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist Hydrating Face Mist bottle",
+            "caption": "Instant hydration in a fine mist"
+          }
+        },
+        "hero_slide_2": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist skincare mist for glowing skin",
+            "caption": "Fresh glow for work, travel, and makeup prep"
+          }
+        },
+        "hero_slide_3": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist face mist daily skincare",
+            "caption": "Lightweight skincare for daily touch-ups"
+          }
+        },
         "trust_1": {
           "type": "trust_badge",
           "settings": {
@@ -32,6 +53,9 @@
         }
       },
       "block_order": [
+        "hero_slide_1",
+        "hero_slide_2",
+        "hero_slide_3",
         "trust_1",
         "trust_2",
         "trust_3"
