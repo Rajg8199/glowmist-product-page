@@ -179,8 +179,9 @@
   min-height: 20px;
 }
 
-.glowmist-message[data-type="success"] {
-  color: #26734d;
+.glowmist-message[data-type=success] {
+    color: #26734d;
+    text-align: center;
 }
 
 .glowmist-message[data-type="error"] {
