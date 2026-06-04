@@ -1,0 +1,163 @@
+{
+  "sections": {
+    "glowmist_product_landing": {
+      "type": "glowmist-product-landing",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "drop",
+            "title": "Deep hydration",
+            "text": "A fine mist that helps skin feel supple without a heavy finish."
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Refreshes dull skin",
+            "text": "Revives tired-looking skin with a fresh, dewy appearance."
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "feather",
+            "title": "Non-sticky formula",
+            "text": "Layers comfortably under sunscreen or over makeup."
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "bag",
+            "title": "Travel-friendly",
+            "text": "Made for handbag, desk, gym bag, and in-flight touch-ups."
+          }
+        },
+        "ingredient_1": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Aloe Vera",
+            "description": "Soothes and hydrates skin after cleansing or sun exposure."
+          }
+        },
+        "ingredient_2": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Rose Water",
+            "description": "Refreshes, tones, and gives the mist its soft botanical feel."
+          }
+        },
+        "ingredient_3": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hyaluronic Acid",
+            "description": "Helps retain moisture for a plump, dewy look."
+          }
+        },
+        "ingredient_4": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Green Tea Extract",
+            "description": "Supports the skin barrier with antioxidant care."
+          }
+        },
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "name": "Ananya S.",
+            "rating": 5,
+            "text": "My skin feels fresh after one spray. I keep it on my work desk and use it before video calls."
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "name": "Meera K.",
+            "rating": 5,
+            "text": "The mist is fine, not sticky, and works beautifully over makeup."
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "name": "Riya P.",
+            "rating": 4,
+            "text": "Lightweight and calming. The Buy 2, Get 1 offer is perfect because I use it daily."
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it suitable for oily skin?",
+            "answer": "Yes. GlowMist is lightweight, non-sticky, and suitable for oily, dry, combination, and normal skin types."
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use it over makeup?",
+            "answer": "Yes. Hold the bottle 8 to 10 inches away and spray lightly to refresh makeup without disturbing the base."
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "How many times can I use it daily?",
+            "answer": "Use it whenever your skin needs a refresh. Most customers use it 2 to 4 times a day."
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it alcohol-free?",
+            "answer": "The section content is editable. Connect it to the final product formula once the brand confirms the ingredient list."
+          }
+        },
+        "trust_1": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Dermatologically tested"
+          }
+        },
+        "trust_2": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "No sticky residue"
+          }
+        },
+        "trust_3": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Free prepaid shipping"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4",
+        "ingredient_1",
+        "ingredient_2",
+        "ingredient_3",
+        "ingredient_4",
+        "review_1",
+        "review_2",
+        "review_3",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "trust_1",
+        "trust_2",
+        "trust_3"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "glowmist_product_landing"
+  ]
+}

@@ -1,0 +1,476 @@
+{% comment %}
+  Section: subscription-product.liquid
+  Requirements:
+  - Product assigned by JSON template (section is the page)
+  - Variants include "Purchase Mode" option values: Single, Double
+  - Variants include "Flavor" option values: Chocolate, Vanilla, Orange
+  - Metafields under subscription_ui namespace (see doc)
+{% endcomment %}
+
+{% assign product = product | default: section.settings.product %}
+<section id="sub-product" class="sub-product container">
+  <div class="grid grid--2-col">
+    <!-- Media Gallery -->
+    <div class="sub-product__media">
+      <div class="sub-product__media-main" id="MainMedia">
+        {% if product.media.size > 0 %}
+          {% assign first_media = product.media.first %}
+          {% render 'media', media: first_media, sizes: '800x' %}
+        {% else %}
+          <div class="placeholder">No media</div>
+        {% endif %}
+      </div>
+
+      {% if product.media.size > 1 %}
+      <div class="sub-product__thumbs" id="Thumbs">
+        {% for m in product.media %}
+          <button class="thumb" data-media-id="{{ m.id }}" aria-label="Show image {{ forloop.index }}">
+            {% render 'media', media: m, sizes: '160x' %}
+          </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right Column -->
+    <div class="sub-product__info" data-product-handle="{{ product.handle }}">
+      <h1 class="sub-product__title">{{ product.title }}</h1>
+
+      {% render 'rating-badge', product: product %}
+
+      {% if product.description != blank %}
+        <div class="sub-product__desc rte">{{ product.description }}</div>
+      {% endif %}
+
+      <!-- Purchase Mode Radios -->
+      <fieldset class="sub-product__modes" id="PurchaseModes">
+        <legend class="sr-only">Purchase Options</legend>
+
+{% assign mode_index = 0 %}
+{% for opt in product.options_with_values %}
+  {% assign opt_down = opt.name | downcase %}
+  {% if opt_down contains 'purchase' or opt_down contains 'mode' %}
+    {% assign mode_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+
+{% assign flavors_option_index = 0 %}
+{% for opt in product.options_with_values %}
+  {% assign opt_down = opt.name | downcase %}
+  {% if opt_down contains 'flavor' %}
+    {% assign flavors_option_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+
+
+        {% assign modes = product.options_with_values[mode_index].values %}
+        {% for v in modes %}
+          {% assign id = v | handleize %}
+          <label class="mode-tile">
+            <input type="radio" name="purchase_mode" value="{{ v | escape }}" {% if v == 'Single' %}checked{% endif %} />
+            <span class="mode-tile__label">
+              {% if v == 'Single' %}Single Drink Subscription{% else %}Double Drink Subscription{% endif %}
+            </span>
+            <span class="mode-tile__price" data-mode-price="{{ v | escape }}"></span>
+          </label>
+        {% endfor %}
+      </fieldset>
+
+      <!-- Flavor Selection -->
+      <div class="sub-product__flavors" id="FlavorSelectors"
+           data-flavor-index="{{ flavors_option_index }}" data-mode-index="{{ mode_index }}">
+        <!-- Single mode shows one selector; Double shows two -->
+        <div class="flavor-group" data-flavor-slot="1">
+          <div class="flavor-group__title">Choose Flavor{% if product.options.size > 0 %} 1{% endif %}</div>
+          <div class="flavor-swatches" data-slot="1">
+            {% for val in product.options_with_values[flavors_option_index].values %}
+              <label class="flavor-swatch">
+                <input type="radio" name="flavor_1" value="{{ val | escape }}" {% if val == 'Chocolate' %}checked{% endif %}>
+                <span class="flavor-swatch__ui" data-flavor="{{ val | escape }}">
+                  <span class="flavor-swatch__img" data-img-role="flavor" data-flavor="{{ val | escape }}"></span>
+                  <span class="flavor-swatch__label">{{ val }}</span>
+                </span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="flavor-group" data-flavor-slot="2" hidden>
+          <div class="flavor-group__title">Choose Flavor 2</div>
+          <div class="flavor-swatches" data-slot="2">
+            {% for val in product.options_with_values[flavors_option_index].values %}
+              <label class="flavor-swatch">
+                <input type="radio" name="flavor_2" value="{{ val | escape }}" {% if val == 'Chocolate' %}checked{% endif %}>
+                <span class="flavor-swatch__ui" data-flavor="{{ val | escape }}">
+                  <span class="flavor-swatch__img" data-img-role="flavor" data-flavor="{{ val | escape }}"></span>
+                  <span class="flavor-swatch__label">{{ val }}</span>
+                </span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- What's Included -->
+      <div class="sub-product__included" id="WhatsIncluded">
+        <div class="included__row">
+          <div class="included__card" data-included="frequency">
+            <div class="included__title">
+              {{ product.metafields.subscription_ui.frequency_label | default: 'Every 30 Days' }}
+            </div>
+            <div class="included__body" id="IncludedFrequency">
+              <!-- Auto image/preview for flavor 1 -->
+              <div class="included__thumb" data-thumb="f1"></div>
+            </div>
+          </div>
+
+          <div class="included__card" data-included="onetime">
+            <div class="included__title">
+              {{ product.metafields.subscription_ui.one_time_label | default: 'One Time (Free)' }}
+            </div>
+            <div class="included__body" id="IncludedOneTime">
+              <div class="included__thumb" data-thumb="f1"></div>
+              <div class="included__thumb" data-thumb="f2"></div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="included__bullets" id="IncludedBullets">
+          {% assign single_title = product.metafields.subscription_ui.single_included_title | default: 'What’s Included:' %}
+          {% assign double_title = product.metafields.subscription_ui.double_included_title | default: 'What’s Included:' %}
+          <li class="included__section-title" data-single-title="{{ single_title | escape }}"
+              data-double-title="{{ double_title | escape }}">{{ single_title }}</li>
+
+          {% for line in product.metafields.subscription_ui.single_included_bullets.value %}
+            <li class="bullet" data-mode="single">{{ line }}</li>
+          {% endfor %}
+          {% for line in product.metafields.subscription_ui.double_included_bullets.value %}
+            <li class="bullet" data-mode="double" hidden>{{ line }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Price + ATC -->
+      <div class="sub-product__purchase">
+        <div class="price-block" id="PriceBlock">
+          <div class="price-block__row">
+            <div>
+              <div class="price-block__label">Recommended</div>
+              <div class="price-block__prices">
+                <span class="price-now" id="PriceNow"></span>
+                <span class="price-compare" id="PriceCompare"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="AddToCart" class="btn btn--primary" disabled>
+          Add to Cart
+        </button>
+        <div id="AtcError" class="atc-error" hidden></div>
+      </div>
+
+      <!-- JSON for JS -->
+      <script type="application/json" id="ProductJSON-{{ product.id }}">
+        {
+          "id": {{ product.id }},
+          "title": {{ product.title | json }},
+          "handle": {{ product.handle | json }},
+          "options": {{ product.options | json }},
+          "variants": [
+            {% for v in product.variants %}
+              {
+                "id": {{ v.id }},
+                "available": {{ v.available | json }},
+                "title": {{ v.title | json }},
+                "price": {{ v.price | json }},
+                "compare_at_price": {{ v.compare_at_price | default: v.price | json }},
+                "options": {{ v.options | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ],
+          "media": [
+            {% for m in product.media %}
+              {
+                "id": {{ m.id }},
+                "alt": {{ m.alt | json }},
+                "preview_image": {{ m.preview_image | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }
+      </script>
+    </div>
+  </div>
+
+  <style>
+    /* Minimal styles — tailor to your theme */
+    .grid{display:grid;gap:2rem}.grid--2-col{grid-template-columns:1fr 1fr}
+    .sub-product__thumbs{display:flex;gap:.5rem;margin-top:1rem}
+    .thumb{border:1px solid #e5e5e5;border-radius:.5rem;overflow:hidden}
+    .mode-tile{display:flex;align-items:center;gap:.75rem;padding:.75rem;border:1px solid #e5e5e5;border-radius:.75rem;margin-bottom:.5rem}
+    .flavor-swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+    .flavor-swatch{display:flex}
+    .flavor-swatch input{position:absolute;opacity:0}
+    .flavor-swatch__ui{display:flex;align-items:center;gap:.5rem;padding:.5rem;border:1px solid #e5e5e5;border-radius:.5rem;width:100%}
+    .included__row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+    .included__card{border:1px solid #e5e5e5;border-radius:.75rem;padding:1rem}
+    .price-block__prices{display:flex;gap:.75rem;align-items:baseline}
+    .price-now{font-size:1.5rem;font-weight:700}
+    .price-compare{text-decoration:line-through;opacity:.6}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.9rem 1.25rem;border-radius:.75rem}
+    .btn--primary{background:#111;color:#fff}
+    @media (max-width: 900px){.grid--2-col{grid-template-columns:1fr}}
+  </style>
+
+  <script>
+  (() => {
+    const productData = JSON.parse(document.getElementById('ProductJSON-{{ product.id }}').textContent);
+
+    const el = {
+      mainMedia: document.getElementById('MainMedia'),
+      thumbs: document.getElementById('Thumbs'),
+      modes: document.getElementById('PurchaseModes'),
+      flavorWrap: document.getElementById('FlavorSelectors'),
+      group2: null,
+      priceNow: document.getElementById('PriceNow'),
+      priceCompare: document.getElementById('PriceCompare'),
+      bullets: document.getElementById('IncludedBullets'),
+      incFreq: document.getElementById('IncludedFrequency'),
+      incOne: document.getElementById('IncludedOneTime'),
+      add: document.getElementById('AddToCart'),
+      err: document.getElementById('AtcError')
+    };
+
+    // Helpers
+    const money = (cents) => {
+      return (cents/100).toLocaleString(undefined,{style:'currency',currency:{{ shop.currency | json }}});
+    };
+    const findOptionIndex = (name) => productData.options.findIndex(o => o.toLowerCase().includes(name));
+    const modeIndex = findOptionIndex('purchase') >= 0 ? findOptionIndex('purchase') : findOptionIndex('mode');
+    const flavorIndex = findOptionIndex('flavor');
+
+    function getSelection() {
+      const mode = document.querySelector('input[name="purchase_mode"]:checked')?.value || 'Single';
+      const f1 = document.querySelector('input[name="flavor_1"]:checked')?.value;
+      const f2 = document.querySelector('input[name="flavor_2"]:checked')?.value;
+      return { mode, flavors: [f1, f2].filter(Boolean) };
+    }
+
+    function matchVariant(mode, flavor) {
+      // Builds option array by indexes
+      const options = [];
+      productData.options.forEach((_, i) => {
+        if (i === modeIndex) options[i] = mode;
+        else if (i === flavorIndex) options[i] = flavor;
+        else options[i] = null;
+      });
+
+      // Match by option values
+      return productData.variants.find(v => {
+        return v.options.every((ov, idx) => {
+          if (options[idx] === null) return true;
+          return ov === options[idx];
+        });
+      });
+    }
+
+    // Pricing per rules:
+    // final_main = 20% off main
+    // sub_main = 25% off main
+    // final_sub = 20% off sub_main
+    function computePrices(variantPrice) {
+      const main = variantPrice;
+      const subMain = Math.round(main * 0.75);
+      const finalMain = Math.round(main * 0.80);
+      const finalSub = Math.round(subMain * 0.80);
+      return { main, subMain, finalMain, finalSub };
+    }
+
+    function updatePriceUI() {
+      const { mode, flavors } = getSelection();
+      // pick flavor 1 for the representative variant
+      const v = matchVariant(mode, flavors[0]);
+      if (!v) { el.add.disabled = true; return; }
+
+      const p = computePrices(v.price);
+      if (mode === 'Single') {
+        el.priceNow.textContent = money(p.finalSub);  // show discounted sub price as main in card
+        el.priceCompare.textContent = money(p.finalMain); // compare to one-time discounted (for visual)
+      } else {
+        // Double: two variants summed (flavor1 + flavor2)
+        const v2 = matchVariant(mode, flavors[1] || flavors[0]);
+        if (!v2) { el.add.disabled = true; return; }
+        const p1 = computePrices(v.price);
+        const p2 = computePrices(v2.price);
+        const sumFinalSub = p1.finalSub + p2.finalSub;
+        const sumFinalMain = p1.finalMain + p2.finalMain;
+        el.priceNow.textContent = money(sumFinalSub);
+        el.priceCompare.textContent = money(sumFinalMain);
+      }
+    }
+
+    function toggleFlavorGroups() {
+      const { mode } = getSelection();
+      const group2 = document.querySelector('[data-flavor-slot="2"]');
+      if (mode === 'Double') {
+        group2.hidden = false;
+      } else {
+        group2.hidden = true;
+      }
+      // Bullets title & list
+      const titleLi = el.bullets.querySelector('.included__section-title');
+      const singleTitle = titleLi.dataset.singleTitle;
+      const doubleTitle = titleLi.dataset.doubleTitle;
+      titleLi.textContent = (mode === 'Double') ? doubleTitle : singleTitle;
+      el.bullets.querySelectorAll('.bullet').forEach(li => {
+        li.hidden = (mode === 'Double') ? (li.dataset.mode !== 'double') : (li.dataset.mode !== 'single');
+      });
+    }
+
+    function updateIncludedThumbs() {
+      // For demo we just inject placeholders with flavor labels; you can map to images by alt/flavor if needed.
+      const { flavors } = getSelection();
+      ['f1','f2'].forEach((slot, idx) => {
+        document.querySelectorAll(`[data-thumb="${slot}"]`).forEach(n => n.textContent = flavors[idx] ? flavors[idx] : '');
+      });
+    }
+
+    function updateMainMediaOnFlavor() {
+      // If you have images named by flavor in alt tags, you can switch to the first match
+      const { flavors } = getSelection();
+      const targetFlavor = flavors[0];
+      if (!targetFlavor) return;
+      const media = {{ product.media | json }};
+      const match = media.find(m => (m.alt || '').toLowerCase().includes(targetFlavor.toLowerCase()));
+      if (match) {
+        const btn = document.querySelector(`[data-media-id="${match.id}"]`);
+        if (btn) btn.click();
+      }
+    }
+
+    // Thumbs click → replace main media using <img> inlined HTML for simplicity
+    if (el.thumbs) {
+      el.thumbs.addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-media-id]');
+        if (!b) return;
+        const id = Number(b.dataset.mediaId);
+        const media = {{ product.media | json }};
+        const m = media.find(x => x.id === id);
+        if (!m) return;
+        el.mainMedia.innerHTML = `<img src="${m.preview_image.src}" alt="${m.alt || ''}" loading="eager">`;
+      });
+    }
+
+    // Event wiring
+    el.modes.addEventListener('change', () => { toggleFlavorGroups(); updatePriceUI(); updateIncludedThumbs(); });
+    document.getElementById('FlavorSelectors').addEventListener('change', () => { updatePriceUI(); updateIncludedThumbs(); updateMainMediaOnFlavor(); });
+
+    // Default state: Single + Chocolate
+    function initDefault() {
+      toggleFlavorGroups();
+      updatePriceUI();
+      updateIncludedThumbs();
+      updateMainMediaOnFlavor();
+      el.add.disabled = false;
+    }
+    initDefault();
+
+    // Add to Cart logic
+    el.add.addEventListener('click', async () => {
+      el.err.hidden = true; el.err.textContent = '';
+      const { mode, flavors } = getSelection();
+
+      try {
+        const items = [];
+        if (mode === 'Single') {
+          const v = matchVariant('Single', flavors[0]);
+          if (!v) throw new Error('Variant not available.');
+          items.push({ id: v.id, quantity: 1, properties: { Subscription: 'Yes', Mode: 'Single' } });
+        } else {
+          const v1 = matchVariant('Double', flavors[0]);
+          const v2 = matchVariant('Double', flavors[1] || flavors[0]);
+          if (!v1 || !v2) throw new Error('One or more variants not available.');
+          items.push({ id: v1.id, quantity: 1, properties: { Subscription: 'Yes', Mode: 'Double', Slot: '1' } });
+          items.push({ id: v2.id, quantity: 1, properties: { Subscription: 'Yes', Mode: 'Double', Slot: '2' } });
+        }
+
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items })
+        });
+        if (!res.ok) throw new Error('Cart error');
+        // Optionally redirect to cart or open drawer
+        window.dispatchEvent(new CustomEvent('cart:updated'));
+        {% if settings.cart_type == 'drawer' %}
+          if (window.Shopify && Shopify.theme && Shopify.theme.cartDrawer) Shopify.theme.cartDrawer.open();
+        {% else %}
+          window.location.href = '/cart';
+        {% endif %}
+      } catch (e) {
+        el.err.hidden = false; el.err.textContent = e.message || 'Could not add to cart.';
+      }
+    });
+
+  })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Subscription Product",
+  "tag": "section",
+  "class": "section-subscription-product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Data"
+    },
+    {
+      "type": "paragraph",
+      "content": "This section uses the current product on a product template. Metafields live under namespace `subscription_ui`."
+    },
+    {
+      "type": "product",
+      "id": "fallback_product",
+      "label": "Fallback product (optional)",
+      "info": "Used only when section is previewed outside a product template."
+    },
+    {
+      "type": "checkbox",
+      "id": "open_cart_drawer",
+      "label": "Open cart drawer after Add to Cart",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_swap_media_on_flavor",
+      "label": "Auto-switch main image to selected flavor (by alt text match)",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "note",
+      "name": "How pricing works",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Display price = 25% subscription discount, then 20% sale applied. Compare-at shows one-time price with 20% sale."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subscription Product",
+    }
+  ]
+}
+{% endschema %}

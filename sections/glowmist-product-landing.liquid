@@ -1,0 +1,1312 @@
+{% liquid
+  assign product = section.settings.product
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_title = section.settings.product_name
+  assign product_price = section.settings.price_text
+
+  if product != blank
+    assign product_title = product.title
+    assign product_price = selected_variant.price | money
+  endif
+%}
+
+<section
+  class="glowmist"
+  data-section-id="{{ section.id }}"
+  style="
+    --gm-blush: {{ section.settings.color_blush }};
+    --gm-rose: {{ section.settings.color_rose }};
+    --gm-berry: {{ section.settings.color_berry }};
+    --gm-ink: {{ section.settings.color_ink }};
+    --gm-muted: {{ section.settings.color_muted }};
+    --gm-cream: {{ section.settings.color_cream }};
+  "
+>
+  <div class="glowmist__announcement">
+    {{ section.settings.announcement_text }}
+  </div>
+
+  <div class="glowmist__hero" data-glowmist-hero>
+    <div class="glowmist__hero-copy">
+      <p class="glowmist__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1>{{ section.settings.headline }}</h1>
+      <p class="glowmist__subheadline">{{ section.settings.subheadline }}</p>
+
+      <div class="glowmist__purchase-card">
+        <div>
+          <p class="glowmist__product-name">{{ product_title }}</p>
+          <div class="glowmist__price-row">
+            <span class="glowmist__price" data-glowmist-price>{{ product_price }}</span>
+            <span class="glowmist__offer">{{ section.settings.offer_text }}</span>
+          </div>
+        </div>
+
+        {% if product != blank and product.variants.size > 1 %}
+          <label class="glowmist__field">
+            <span>Variant</span>
+            <select data-glowmist-variant>
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  data-price="{{ variant.price | money }}"
+                  {% unless variant.available %}disabled{% endunless %}
+                  {% if variant.id == selected_variant.id %}selected{% endif %}
+                >
+                  {{ variant.title }}{% unless variant.available %} - Sold out{% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </label>
+        {% elsif selected_variant != blank %}
+          <input type="hidden" data-glowmist-variant value="{{ selected_variant.id }}">
+        {% endif %}
+
+        <div class="glowmist__actions">
+          <label class="glowmist__quantity">
+            <span>Qty</span>
+            <input data-glowmist-quantity type="number" min="1" value="1" inputmode="numeric">
+          </label>
+          <button
+            class="glowmist__button"
+            type="button"
+            data-glowmist-add
+            {% if product != blank and selected_variant.available == false %}disabled{% endif %}
+          >
+            <span data-glowmist-add-label>{{ section.settings.cta_text }}</span>
+          </button>
+        </div>
+
+        <p class="glowmist__form-message" data-glowmist-message role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="glowmist__secondary-actions">
+        <a href="#glowmist-ingredients-{{ section.id }}">{{ section.settings.secondary_cta_text }}</a>
+        <a href="#glowmist-reviews-{{ section.id }}">See Reviews</a>
+      </div>
+    </div>
+
+    <div class="glowmist__hero-media">
+      {% if section.settings.hero_image != blank %}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1200
+          | image_tag:
+            widths: '360, 540, 720, 960, 1200',
+            sizes: '(min-width: 990px) 46vw, 92vw',
+            loading: 'eager',
+            alt: product_title
+        }}
+      {% else %}
+        <img
+          src="{{ 'glowmist-product.png' | asset_url }}"
+          alt="{{ product_title | escape }}"
+          width="1200"
+          height="1200"
+          loading="eager"
+        >
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="glowmist__trust">
+    {% for block in section.blocks %}
+      {% if block.type == 'trust_badge' %}
+        <span {{ block.shopify_attributes }}>{{ block.settings.title }}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="glowmist__band">
+    <div class="glowmist__section-heading">
+      <p>{{ section.settings.benefits_kicker }}</p>
+      <h2>{{ section.settings.benefits_heading }}</h2>
+    </div>
+
+    <div class="glowmist__benefits">
+      {% for block in section.blocks %}
+        {% if block.type == 'benefit' %}
+          <article class="glowmist__benefit" {{ block.shopify_attributes }}>
+            <span class="glowmist__benefit-icon" aria-hidden="true">
+              {% case block.settings.icon %}
+                {% when 'sparkle' %}&#10022;
+                {% when 'feather' %}&#10087;
+                {% when 'bag' %}&#9673;
+                {% else %}&#9679;
+              {% endcase %}
+            </span>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="glowmist__split" id="glowmist-ingredients-{{ section.id }}">
+    <div class="glowmist__section-heading glowmist__section-heading--left">
+      <p>{{ section.settings.ingredients_kicker }}</p>
+      <h2>{{ section.settings.ingredients_heading }}</h2>
+      <span>{{ section.settings.ingredients_text }}</span>
+    </div>
+
+    <div class="glowmist__ingredients">
+      {% for block in section.blocks %}
+        {% if block.type == 'ingredient' %}
+          <article class="glowmist__ingredient" {{ block.shopify_attributes }}>
+            <h3>{{ block.settings.name }}</h3>
+            <p>{{ block.settings.description }}</p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="glowmist__usage">
+    <div class="glowmist__section-heading">
+      <p>{{ section.settings.usage_kicker }}</p>
+      <h2>{{ section.settings.usage_heading }}</h2>
+    </div>
+    <div class="glowmist__steps">
+      <article>
+        <span>1</span>
+        <h3>Spray on clean face</h3>
+        <p>Hold 8 to 10 inches away and mist evenly after cleansing.</p>
+      </article>
+      <article>
+        <span>2</span>
+        <h3>Let it absorb naturally</h3>
+        <p>Allow the fine droplets to settle before serum, SPF, or makeup.</p>
+      </article>
+      <article>
+        <span>3</span>
+        <h3>Use anytime</h3>
+        <p>Refresh during commutes, office hours, workouts, or travel.</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="glowmist__reviews" id="glowmist-reviews-{{ section.id }}">
+    <div class="glowmist__section-heading">
+      <p>{{ section.settings.reviews_kicker }}</p>
+      <h2>{{ section.settings.reviews_heading }}</h2>
+    </div>
+
+    <div class="glowmist__review-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'review' %}
+          <article class="glowmist__review" {{ block.shopify_attributes }}>
+            <div class="glowmist__review-top">
+              {% if block.settings.image != blank %}
+                {{
+                  block.settings.image
+                  | image_url: width: 120
+                  | image_tag: widths: '80, 120', sizes: '48px', loading: 'lazy', alt: block.settings.name
+                }}
+              {% else %}
+                <span>{{ block.settings.name | slice: 0 }}</span>
+              {% endif %}
+              <div>
+                <h3>{{ block.settings.name }}</h3>
+                <p aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {% for index in (1..5) %}
+                    {% if index <= block.settings.rating %}★{% else %}☆{% endif %}
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
+            <blockquote>{{ block.settings.text }}</blockquote>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="glowmist__faq">
+    <div class="glowmist__section-heading">
+      <p>{{ section.settings.faq_kicker }}</p>
+      <h2>{{ section.settings.faq_heading }}</h2>
+    </div>
+
+    <div class="glowmist__faq-list">
+      {% for block in section.blocks %}
+        {% if block.type == 'faq' %}
+          <div class="glowmist__faq-item" {{ block.shopify_attributes }}>
+            <button class="glowmist__faq-button" type="button" aria-expanded="false">
+              <span>{{ block.settings.question }}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+            <div class="glowmist__faq-panel">
+              <p>{{ block.settings.answer }}</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="glowmist__sticky" data-glowmist-sticky>
+    <div>
+      <strong>{{ product_title }}</strong>
+      <span data-glowmist-sticky-price>{{ product_price }}</span>
+    </div>
+    <button
+      class="glowmist__button"
+      type="button"
+      data-glowmist-sticky-add
+      {% if product != blank and selected_variant.available == false %}disabled{% endif %}
+    >
+      {{ section.settings.cta_text }}
+    </button>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const section = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!section) return;
+
+    const hero = section.querySelector('[data-glowmist-hero]');
+    const sticky = section.querySelector('[data-glowmist-sticky]');
+    const variantInput = section.querySelector('[data-glowmist-variant]');
+    const quantityInput = section.querySelector('[data-glowmist-quantity]');
+    const price = section.querySelector('[data-glowmist-price]');
+    const stickyPrice = section.querySelector('[data-glowmist-sticky-price]');
+    const message = section.querySelector('[data-glowmist-message]');
+    const addButtons = section.querySelectorAll('[data-glowmist-add], [data-glowmist-sticky-add]');
+    const addLabel = section.querySelector('[data-glowmist-add-label]');
+
+    addButtons.forEach((button) => {
+      if (button.disabled) button.dataset.disabled = 'true';
+    });
+
+    const setMessage = (text, type = '') => {
+      if (!message) return;
+      message.textContent = text;
+      message.dataset.type = type;
+    };
+
+    const setLoading = (isLoading) => {
+      addButtons.forEach((button) => {
+        button.disabled = isLoading || button.hasAttribute('data-disabled');
+        button.classList.toggle('is-loading', isLoading);
+      });
+      if (addLabel) addLabel.textContent = isLoading ? 'Adding...' : {{ section.settings.cta_text | json }};
+    };
+
+    const addToCart = async () => {
+      const id = variantInput?.value;
+      const quantity = Math.max(parseInt(quantityInput?.value || '1', 10), 1);
+
+      if (!id) {
+        setMessage('Select a Shopify product in the section settings before adding to cart.', 'error');
+        return;
+      }
+
+      setLoading(true);
+      setMessage('');
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ id, quantity })
+        });
+
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({}));
+          throw new Error(error.description || 'Unable to add this product to cart.');
+        }
+
+        setMessage('Added to cart. Your GlowMist is waiting at checkout.', 'success');
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        document.dispatchEvent(new CustomEvent('cart:open'));
+      } catch (error) {
+        setMessage(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    addButtons.forEach((button) => button.addEventListener('click', addToCart));
+
+    if (variantInput?.tagName === 'SELECT') {
+      variantInput.addEventListener('change', () => {
+        const selectedOption = variantInput.options[variantInput.selectedIndex];
+        const nextPrice = selectedOption?.dataset.price;
+        if (nextPrice) {
+          price.textContent = nextPrice;
+          stickyPrice.textContent = nextPrice;
+        }
+      });
+    }
+
+    section.querySelectorAll('.glowmist__faq-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.glowmist__faq-item');
+        const panel = item.querySelector('.glowmist__faq-panel');
+        const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+        button.setAttribute('aria-expanded', String(!isOpen));
+        item.classList.toggle('is-open', !isOpen);
+        panel.style.maxHeight = isOpen ? '0px' : `${panel.scrollHeight}px`;
+      });
+    });
+
+    if (hero && sticky) {
+      const observer = new IntersectionObserver(
+        ([entry]) => sticky.classList.toggle('is-visible', !entry.isIntersecting),
+        { threshold: 0 }
+      );
+      observer.observe(hero);
+    }
+  })();
+</script>
+
+{% style %}
+  .glowmist {
+    background: var(--gm-cream);
+    color: var(--gm-ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0;
+    padding-bottom: 96px;
+  }
+
+  .glowmist *,
+  .glowmist *::before,
+  .glowmist *::after {
+    box-sizing: border-box;
+  }
+
+  .glowmist__announcement {
+    background: var(--gm-ink);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 10px 20px;
+    text-align: center;
+  }
+
+  .glowmist__hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: calc(100vh - 42px);
+    padding: clamp(34px, 6vw, 76px) 20px 42px;
+  }
+
+  .glowmist__eyebrow,
+  .glowmist__section-heading p {
+    color: var(--gm-berry);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+
+  .glowmist h1,
+  .glowmist h2,
+  .glowmist h3,
+  .glowmist p,
+  .glowmist blockquote {
+    margin-top: 0;
+  }
+
+  .glowmist h1 {
+    font-size: clamp(2.4rem, 5.5vw, 5.8rem);
+    line-height: 0.96;
+    max-width: 760px;
+    margin-bottom: 22px;
+  }
+
+  .glowmist__subheadline {
+    color: var(--gm-muted);
+    font-size: clamp(1.02rem, 2vw, 1.24rem);
+    line-height: 1.65;
+    max-width: 620px;
+    margin-bottom: 28px;
+  }
+
+  .glowmist__purchase-card {
+    background: #fff;
+    border: 1px solid rgba(110, 58, 70, 0.14);
+    border-radius: 8px;
+    box-shadow: 0 18px 54px rgba(110, 58, 70, 0.12);
+    display: grid;
+    gap: 18px;
+    max-width: 560px;
+    padding: 18px;
+  }
+
+  .glowmist__product-name {
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .glowmist__price-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .glowmist__price {
+    font-size: 1.45rem;
+    font-weight: 900;
+  }
+
+  .glowmist__offer {
+    background: var(--gm-blush);
+    border-radius: 999px;
+    color: var(--gm-ink);
+    font-size: 0.82rem;
+    font-weight: 900;
+    padding: 7px 11px;
+  }
+
+  .glowmist__field,
+  .glowmist__quantity {
+    display: grid;
+    gap: 7px;
+  }
+
+  .glowmist__field span,
+  .glowmist__quantity span {
+    color: var(--gm-muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .glowmist select,
+  .glowmist input {
+    border: 1px solid rgba(110, 58, 70, 0.2);
+    border-radius: 8px;
+    color: var(--gm-ink);
+    font: inherit;
+    min-height: 48px;
+    padding: 0 12px;
+    width: 100%;
+  }
+
+  .glowmist__actions {
+    display: grid;
+    grid-template-columns: 98px minmax(0, 1fr);
+    gap: 12px;
+    align-items: end;
+  }
+
+  .glowmist__button {
+    appearance: none;
+    background: var(--gm-berry);
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 900;
+    min-height: 52px;
+    padding: 0 22px;
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  .glowmist__button:hover {
+    transform: translateY(-1px);
+  }
+
+  .glowmist__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+  }
+
+  .glowmist__form-message {
+    color: var(--gm-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    min-height: 20px;
+  }
+
+  .glowmist__form-message[data-type="success"] {
+    color: #26734d;
+  }
+
+  .glowmist__form-message[data-type="error"] {
+    color: #b42318;
+  }
+
+  .glowmist__secondary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .glowmist__secondary-actions a {
+    color: var(--gm-berry);
+    font-weight: 900;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .glowmist__hero-media {
+    align-self: stretch;
+    display: grid;
+    place-items: center;
+  }
+
+  .glowmist__hero-media img {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    box-shadow: 0 28px 80px rgba(110, 58, 70, 0.17);
+    height: auto;
+    max-width: min(100%, 560px);
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .glowmist__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 980px;
+    margin: -18px auto 52px;
+    padding: 0 20px;
+  }
+
+  .glowmist__trust span {
+    background: #fff;
+    border: 1px solid rgba(110, 58, 70, 0.12);
+    border-radius: 999px;
+    color: var(--gm-muted);
+    font-size: 0.88rem;
+    font-weight: 800;
+    padding: 10px 14px;
+  }
+
+  .glowmist__band,
+  .glowmist__split,
+  .glowmist__usage,
+  .glowmist__reviews,
+  .glowmist__faq {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 20px;
+  }
+
+  .glowmist__band {
+    background: #fff;
+    max-width: none;
+  }
+
+  .glowmist__band > * {
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .glowmist__section-heading {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .glowmist__section-heading--left {
+    text-align: left;
+  }
+
+  .glowmist__section-heading h2 {
+    font-size: clamp(1.8rem, 3.2vw, 3rem);
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+
+  .glowmist__section-heading span {
+    color: var(--gm-muted);
+    display: block;
+    line-height: 1.65;
+    max-width: 520px;
+  }
+
+  .glowmist__benefits,
+  .glowmist__review-grid,
+  .glowmist__steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .glowmist__benefit,
+  .glowmist__ingredient,
+  .glowmist__review,
+  .glowmist__steps article {
+    background: var(--gm-cream);
+    border: 1px solid rgba(110, 58, 70, 0.12);
+    border-radius: 8px;
+    padding: 22px;
+  }
+
+  .glowmist__benefit-icon {
+    align-items: center;
+    background: var(--gm-blush);
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: 1.15rem;
+    height: 42px;
+    justify-content: center;
+    margin-bottom: 18px;
+    width: 42px;
+  }
+
+  .glowmist__benefit h3,
+  .glowmist__ingredient h3,
+  .glowmist__review h3,
+  .glowmist__steps h3 {
+    font-size: 1.04rem;
+    margin-bottom: 8px;
+  }
+
+  .glowmist__benefit p,
+  .glowmist__ingredient p,
+  .glowmist__steps p,
+  .glowmist__review blockquote {
+    color: var(--gm-muted);
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  .glowmist__split {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(26px, 5vw, 70px);
+    align-items: start;
+  }
+
+  .glowmist__ingredients {
+    display: grid;
+    gap: 14px;
+  }
+
+  .glowmist__ingredient {
+    background: #fff;
+  }
+
+  .glowmist__usage {
+    background: #fff7f8;
+    max-width: none;
+  }
+
+  .glowmist__usage > * {
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .glowmist__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .glowmist__steps article {
+    background: #fff;
+  }
+
+  .glowmist__steps span {
+    align-items: center;
+    background: var(--gm-berry);
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    font-weight: 900;
+    height: 36px;
+    justify-content: center;
+    margin-bottom: 16px;
+    width: 36px;
+  }
+
+  .glowmist__review-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .glowmist__review {
+    background: #fff;
+  }
+
+  .glowmist__review-top {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .glowmist__review-top img,
+  .glowmist__review-top > span {
+    border-radius: 50%;
+    flex: 0 0 48px;
+    height: 48px;
+    object-fit: cover;
+    width: 48px;
+  }
+
+  .glowmist__review-top > span {
+    align-items: center;
+    background: var(--gm-blush);
+    display: inline-flex;
+    font-weight: 900;
+    justify-content: center;
+  }
+
+  .glowmist__review-top h3,
+  .glowmist__review-top p {
+    margin-bottom: 0;
+  }
+
+  .glowmist__review-top p {
+    color: #d28a20;
+  }
+
+  .glowmist__faq-list {
+    display: grid;
+    gap: 10px;
+    max-width: 840px;
+    margin: 0 auto;
+  }
+
+  .glowmist__faq-item {
+    background: #fff;
+    border: 1px solid rgba(110, 58, 70, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .glowmist__faq-button {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--gm-ink);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-weight: 900;
+    justify-content: space-between;
+    min-height: 62px;
+    padding: 0 18px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .glowmist__faq-button span:last-child {
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: transform 180ms ease;
+  }
+
+  .glowmist__faq-item.is-open .glowmist__faq-button span:last-child {
+    transform: rotate(45deg);
+  }
+
+  .glowmist__faq-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 220ms ease;
+  }
+
+  .glowmist__faq-panel p {
+    color: var(--gm-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding: 0 18px 18px;
+  }
+
+  .glowmist__sticky {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(110, 58, 70, 0.14);
+    border-radius: 8px 8px 0 0;
+    bottom: 0;
+    box-shadow: 0 -12px 34px rgba(110, 58, 70, 0.13);
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    left: 50%;
+    max-width: 760px;
+    opacity: 0;
+    padding: 12px;
+    pointer-events: none;
+    position: fixed;
+    transform: translate(-50%, 18px);
+    transition: opacity 180ms ease, transform 180ms ease;
+    width: min(calc(100% - 24px), 760px);
+    z-index: 40;
+  }
+
+  .glowmist__sticky.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+
+  .glowmist__sticky div {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .glowmist__sticky strong,
+  .glowmist__sticky span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .glowmist__sticky span {
+    color: var(--gm-muted);
+    font-weight: 800;
+  }
+
+  @media (max-width: 989px) {
+    .glowmist__hero,
+    .glowmist__split {
+      grid-template-columns: 1fr;
+    }
+
+    .glowmist__hero {
+      min-height: auto;
+    }
+
+    .glowmist__hero-media {
+      order: -1;
+    }
+
+    .glowmist__benefits,
+    .glowmist__review-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .glowmist h1 {
+      font-size: 2.55rem;
+    }
+
+    .glowmist__actions,
+    .glowmist__benefits,
+    .glowmist__review-grid,
+    .glowmist__steps {
+      grid-template-columns: 1fr;
+    }
+
+    .glowmist__quantity {
+      grid-template-columns: 52px 1fr;
+      align-items: center;
+    }
+
+    .glowmist__sticky {
+      border-radius: 0;
+      width: 100%;
+    }
+
+    .glowmist__sticky .glowmist__button {
+      min-width: 132px;
+      padding: 0 14px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "GlowMist landing page",
+  "tag": "section",
+  "class": "section-glowmist-product-landing",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free shipping on prepaid orders"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "GlowMist Hydrating Face Mist"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Instant Hydration. Natural Glow. Anytime."
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline",
+      "label": "Subheadline",
+      "default": "A premium face mist made for daily hydration, dewy skin, and quick refreshes between skincare steps, meetings, workouts, and travel."
+    },
+    {
+      "type": "text",
+      "id": "product_name",
+      "label": "Fallback product name",
+      "default": "GlowMist Hydrating Face Mist"
+    },
+    {
+      "type": "text",
+      "id": "price_text",
+      "label": "Fallback price",
+      "default": "₹999"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Offer badge",
+      "default": "Buy 2, Get 1 Free"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA text",
+      "default": "View Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "benefits_kicker",
+      "label": "Benefits kicker",
+      "default": "Why it works"
+    },
+    {
+      "type": "text",
+      "id": "benefits_heading",
+      "label": "Benefits heading",
+      "default": "Fresh skin benefits in one fine mist"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_kicker",
+      "label": "Ingredients kicker",
+      "default": "Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "ingredients_heading",
+      "label": "Ingredients heading",
+      "default": "Hydration-focused skincare actives"
+    },
+    {
+      "type": "textarea",
+      "id": "ingredients_text",
+      "label": "Ingredients intro",
+      "default": "GlowMist brings together calming botanicals and hydration support for skin that looks rested and feels comfortable."
+    },
+    {
+      "type": "text",
+      "id": "usage_kicker",
+      "label": "Usage kicker",
+      "default": "How to use"
+    },
+    {
+      "type": "text",
+      "id": "usage_heading",
+      "label": "Usage heading",
+      "default": "Three steps to a dewy refresh"
+    },
+    {
+      "type": "text",
+      "id": "reviews_kicker",
+      "label": "Reviews kicker",
+      "default": "Customer love"
+    },
+    {
+      "type": "text",
+      "id": "reviews_heading",
+      "label": "Reviews heading",
+      "default": "Daily glow, reviewed"
+    },
+    {
+      "type": "text",
+      "id": "faq_kicker",
+      "label": "FAQ kicker",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ heading",
+      "default": "Before you mist"
+    },
+    {
+      "type": "color",
+      "id": "color_blush",
+      "label": "Blush",
+      "default": "#f7c8ce"
+    },
+    {
+      "type": "color",
+      "id": "color_rose",
+      "label": "Rose",
+      "default": "#e78b98"
+    },
+    {
+      "type": "color",
+      "id": "color_berry",
+      "label": "Berry",
+      "default": "#8f3d55"
+    },
+    {
+      "type": "color",
+      "id": "color_ink",
+      "label": "Ink",
+      "default": "#33232a"
+    },
+    {
+      "type": "color",
+      "id": "color_muted",
+      "label": "Muted text",
+      "default": "#6d5961"
+    },
+    {
+      "type": "color",
+      "id": "color_cream",
+      "label": "Cream background",
+      "default": "#fff8f6"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "drop",
+          "options": [
+            {
+              "value": "drop",
+              "label": "Drop"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "feather",
+              "label": "Feather"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Deep hydration"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Hydrates skin with a fine, comfortable mist."
+        }
+      ]
+    },
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Aloe Vera"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Soothes and hydrates skin."
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Customer image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "Ananya S."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review text",
+          "default": "My skin feels instantly refreshed and glowy."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Is it suitable for oily skin?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Yes. The formula is lightweight and non-sticky."
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Dermatologically tested"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GlowMist landing page",
+      "blocks": [
+        {
+          "type": "benefit"
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Refreshes dull skin",
+            "text": "Revives tired-looking skin with a healthy dewy finish."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "feather",
+            "title": "Non-sticky formula",
+            "text": "Comfortable for layering under skincare or over makeup."
+          }
+        },
+        {
+          "type": "ingredient"
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Rose Water",
+            "description": "Refreshes and tones skin."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hyaluronic Acid",
+            "description": "Helps retain moisture for a plump look."
+          }
+        },
+        {
+          "type": "review"
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Meera K.",
+            "text": "The mist is fine, not sticky, and works beautifully over makeup."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Riya P.",
+            "rating": 4,
+            "text": "Lightweight and calming. The offer is perfect because I use it daily."
+          }
+        },
+        {
+          "type": "faq"
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use it over makeup?",
+            "answer": "Yes. Hold the bottle 8 to 10 inches away and spray lightly."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How many times can I use it daily?",
+            "answer": "Use it whenever your skin needs a refresh."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is it alcohol-free?",
+            "answer": "Update this answer once the final formula is confirmed."
+          }
+        },
+        {
+          "type": "trust_badge"
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "title": "No sticky residue"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
