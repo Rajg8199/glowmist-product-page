@@ -25,7 +25,7 @@
   margin-top: 0;
 }
 
-.glowmist-announcement {
+/* .glowmist-announcement {
   background: var(--gm-ink);
   color: #fff;
   font-size: 0.9rem;
@@ -262,7 +262,7 @@
 
 .glowmist-soft {
   background: #fff7f8;
-}
+} */
 
 .glowmist-benefits,
 .glowmist-reviews,
