@@ -1,12 +1,5 @@
 {{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
 
-{%- comment -%} ============================================================
-  GlowMist Hero Section — CRO-Optimised
-  Improvements: social proof, sticky ATC, urgency strip, scarcity,
-  floating benefit chips, radial glow aura, compare-at price,
-  guarantee strip, mobile-first sticky bar, loading states.
-{%- endcomment -%}
-
 {% liquid
   assign product          = section.settings.product
   assign selected_variant = product.selected_or_first_available_variant
