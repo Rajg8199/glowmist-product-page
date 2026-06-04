@@ -1,0 +1,70 @@
+{{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
+
+<section class="glowmist-section glowmist-white">
+  <div class="glowmist-container">
+    <div class="glowmist-heading">
+      <p>{{ section.settings.kicker }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="glowmist-benefits">
+      {% for block in section.blocks %}
+        <article class="glowmist-benefit" {{ block.shopify_attributes }}>
+          <span class="glowmist-benefit-icon" aria-hidden="true">
+            {% case block.settings.icon %}
+              {% when 'sparkle' %}&#10022;
+              {% when 'feather' %}&#10087;
+              {% when 'bag' %}&#9673;
+              {% else %}&#9679;
+            {% endcase %}
+          </span>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowMist benefits",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Why it works" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fresh skin benefits in one fine mist" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "drop",
+          "options": [
+            { "value": "drop", "label": "Drop" },
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "feather", "label": "Feather" },
+            { "value": "bag", "label": "Bag" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Deep hydration" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Hydrates skin with a fine, comfortable mist." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GlowMist benefits",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "drop", "title": "Deep hydration", "text": "A fine mist that helps skin feel supple without a heavy finish." } },
+        { "type": "benefit", "settings": { "icon": "sparkle", "title": "Refreshes dull skin", "text": "Revives tired-looking skin with a fresh, dewy appearance." } },
+        { "type": "benefit", "settings": { "icon": "feather", "title": "Non-sticky formula", "text": "Layers comfortably under sunscreen or over makeup." } },
+        { "type": "benefit", "settings": { "icon": "bag", "title": "Travel-friendly", "text": "Made for handbag, desk, gym bag, and in-flight touch-ups." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

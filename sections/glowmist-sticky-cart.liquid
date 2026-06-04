@@ -1,0 +1,65 @@
+{{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glowmist-landing.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign product = section.settings.product
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_title = section.settings.product_name
+  assign product_price = section.settings.price_text
+
+  if product != blank
+    assign product_title = product.title
+    assign product_price = selected_variant.price | money
+  endif
+%}
+
+<section class="glowmist-section" data-glowmist-cart>
+  {% if product != blank and product.variants.size > 1 %}
+    <select data-glowmist-variant hidden>
+      {% for variant in product.variants %}
+        <option
+          value="{{ variant.id }}"
+          data-price="{{ variant.price | money }}"
+          {% unless variant.available %}disabled{% endunless %}
+          {% if variant.id == selected_variant.id %}selected{% endif %}
+        >
+          {{ variant.title }}
+        </option>
+      {% endfor %}
+    </select>
+  {% elsif selected_variant != blank %}
+    <input type="hidden" data-glowmist-variant value="{{ selected_variant.id }}">
+  {% endif %}
+  <input type="hidden" data-glowmist-quantity value="1">
+  <p class="glowmist-message" data-glowmist-message role="status" aria-live="polite" hidden></p>
+
+  <div class="glowmist-sticky" data-glowmist-sticky>
+    <div>
+      <strong>{{ product_title }}</strong>
+      <span data-glowmist-price>{{ product_price }}</span>
+    </div>
+    <button
+      class="glowmist-button"
+      type="button"
+      data-glowmist-add
+      {% if product != blank and selected_variant.available == false %}disabled{% endif %}
+    >
+      <span data-glowmist-add-label>{{ section.settings.cta_text }}</span>
+    </button>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowMist sticky cart",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "product_name", "label": "Fallback product name", "default": "GlowMist Hydrating Face Mist" },
+    { "type": "text", "id": "price_text", "label": "Fallback price", "default": "₹999" },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Add to Cart" }
+  ],
+  "presets": [
+    { "name": "GlowMist sticky cart" }
+  ]
+}
+{% endschema %}

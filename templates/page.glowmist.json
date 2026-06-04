@@ -1,7 +1,36 @@
 {
   "sections": {
-    "glowmist_product_landing": {
-      "type": "glowmist-product-landing",
+    "glowmist_hero": {
+      "type": "glowmist-hero",
+      "blocks": {
+        "trust_1": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Dermatologically tested"
+          }
+        },
+        "trust_2": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "No sticky residue"
+          }
+        },
+        "trust_3": {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Free prepaid shipping"
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3"
+      ],
+      "settings": {}
+    },
+    "glowmist_benefits": {
+      "type": "glowmist-benefits",
       "blocks": {
         "benefit_1": {
           "type": "benefit",
@@ -34,7 +63,19 @@
             "title": "Travel-friendly",
             "text": "Made for handbag, desk, gym bag, and in-flight touch-ups."
           }
-        },
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4"
+      ],
+      "settings": {}
+    },
+    "glowmist_ingredients": {
+      "type": "glowmist-ingredients",
+      "blocks": {
         "ingredient_1": {
           "type": "ingredient",
           "settings": {
@@ -62,7 +103,51 @@
             "name": "Green Tea Extract",
             "description": "Supports the skin barrier with antioxidant care."
           }
+        }
+      },
+      "block_order": [
+        "ingredient_1",
+        "ingredient_2",
+        "ingredient_3",
+        "ingredient_4"
+      ],
+      "settings": {}
+    },
+    "glowmist_usage": {
+      "type": "glowmist-usage",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Spray on clean face",
+            "text": "Hold 8 to 10 inches away and mist evenly after cleansing."
+          }
         },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "title": "Let it absorb naturally",
+            "text": "Allow the fine droplets to settle before serum, SPF, or makeup."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Use anytime",
+            "text": "Refresh during commutes, office hours, workouts, or travel."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {}
+    },
+    "glowmist_reviews": {
+      "type": "glowmist-reviews",
+      "blocks": {
         "review_1": {
           "type": "review",
           "settings": {
@@ -86,7 +171,18 @@
             "rating": 4,
             "text": "Lightweight and calming. The Buy 2, Get 1 offer is perfect because I use it daily."
           }
-        },
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3"
+      ],
+      "settings": {}
+    },
+    "glowmist_faq": {
+      "type": "glowmist-faq",
+      "blocks": {
         "faq_1": {
           "type": "faq",
           "settings": {
@@ -114,50 +210,28 @@
             "question": "Is it alcohol-free?",
             "answer": "The section content is editable. Connect it to the final product formula once the brand confirms the ingredient list."
           }
-        },
-        "trust_1": {
-          "type": "trust_badge",
-          "settings": {
-            "title": "Dermatologically tested"
-          }
-        },
-        "trust_2": {
-          "type": "trust_badge",
-          "settings": {
-            "title": "No sticky residue"
-          }
-        },
-        "trust_3": {
-          "type": "trust_badge",
-          "settings": {
-            "title": "Free prepaid shipping"
-          }
         }
       },
       "block_order": [
-        "benefit_1",
-        "benefit_2",
-        "benefit_3",
-        "benefit_4",
-        "ingredient_1",
-        "ingredient_2",
-        "ingredient_3",
-        "ingredient_4",
-        "review_1",
-        "review_2",
-        "review_3",
         "faq_1",
         "faq_2",
         "faq_3",
-        "faq_4",
-        "trust_1",
-        "trust_2",
-        "trust_3"
+        "faq_4"
       ],
+      "settings": {}
+    },
+    "glowmist_sticky_cart": {
+      "type": "glowmist-sticky-cart",
       "settings": {}
     }
   },
   "order": [
-    "glowmist_product_landing"
+    "glowmist_hero",
+    "glowmist_benefits",
+    "glowmist_ingredients",
+    "glowmist_usage",
+    "glowmist_reviews",
+    "glowmist_faq",
+    "glowmist_sticky_cart"
   ]
 }

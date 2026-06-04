@@ -1,0 +1,531 @@
+.glowmist-section {
+  --gm-blush: #f7c8ce;
+  --gm-rose: #e78b98;
+  --gm-berry: #8f3d55;
+  --gm-ink: #33232a;
+  --gm-muted: #6d5961;
+  --gm-cream: #fff8f6;
+  background: var(--gm-cream);
+  color: var(--gm-ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+.glowmist-section *,
+.glowmist-section *::before,
+.glowmist-section *::after {
+  box-sizing: border-box;
+}
+
+.glowmist-section h1,
+.glowmist-section h2,
+.glowmist-section h3,
+.glowmist-section p,
+.glowmist-section blockquote {
+  margin-top: 0;
+}
+
+.glowmist-announcement {
+  background: var(--gm-ink);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.glowmist-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 64px 20px;
+}
+
+.glowmist-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+  min-height: calc(100vh - 42px);
+  padding-top: clamp(34px, 6vw, 76px);
+  padding-bottom: 42px;
+}
+
+.glowmist-eyebrow,
+.glowmist-heading p {
+  color: var(--gm-berry);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.glowmist-hero h1 {
+  font-size: clamp(2.4rem, 5.5vw, 5.8rem);
+  line-height: 0.96;
+  max-width: 760px;
+  margin-bottom: 22px;
+}
+
+.glowmist-subheadline {
+  color: var(--gm-muted);
+  font-size: clamp(1.02rem, 2vw, 1.24rem);
+  line-height: 1.65;
+  max-width: 620px;
+  margin-bottom: 28px;
+}
+
+.glowmist-card {
+  background: #fff;
+  border: 1px solid rgba(110, 58, 70, 0.14);
+  border-radius: 8px;
+  box-shadow: 0 18px 54px rgba(110, 58, 70, 0.12);
+}
+
+.glowmist-purchase {
+  display: grid;
+  gap: 18px;
+  max-width: 560px;
+  padding: 18px;
+}
+
+.glowmist-product-name {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.glowmist-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.glowmist-price {
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.glowmist-offer {
+  background: var(--gm-blush);
+  border-radius: 999px;
+  color: var(--gm-ink);
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 7px 11px;
+}
+
+.glowmist-field,
+.glowmist-quantity {
+  display: grid;
+  gap: 7px;
+}
+
+.glowmist-field span,
+.glowmist-quantity span {
+  color: var(--gm-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.glowmist-section select,
+.glowmist-section input {
+  border: 1px solid rgba(110, 58, 70, 0.2);
+  border-radius: 8px;
+  color: var(--gm-ink);
+  font: inherit;
+  min-height: 48px;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.glowmist-actions {
+  display: grid;
+  grid-template-columns: 98px minmax(0, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.glowmist-button {
+  appearance: none;
+  background: var(--gm-berry);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  min-height: 52px;
+  padding: 0 22px;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.glowmist-button:hover {
+  transform: translateY(-1px);
+}
+
+.glowmist-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+
+.glowmist-message {
+  color: var(--gm-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  min-height: 20px;
+}
+
+.glowmist-message[data-type="success"] {
+  color: #26734d;
+}
+
+.glowmist-message[data-type="error"] {
+  color: #b42318;
+}
+
+.glowmist-secondary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.glowmist-secondary-actions a {
+  color: var(--gm-berry);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.glowmist-hero-media {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+}
+
+.glowmist-hero-media img {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  box-shadow: 0 28px 80px rgba(110, 58, 70, 0.17);
+  height: auto;
+  max-width: min(100%, 560px);
+  object-fit: cover;
+  width: 100%;
+}
+
+.glowmist-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: -18px auto 52px;
+  padding: 0 20px;
+}
+
+.glowmist-trust span {
+  background: #fff;
+  border: 1px solid rgba(110, 58, 70, 0.12);
+  border-radius: 999px;
+  color: var(--gm-muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 10px 14px;
+}
+
+.glowmist-heading {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.glowmist-heading--left {
+  text-align: left;
+}
+
+.glowmist-heading h2 {
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 12px;
+}
+
+.glowmist-heading span {
+  color: var(--gm-muted);
+  display: block;
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+.glowmist-white {
+  background: #fff;
+}
+
+.glowmist-soft {
+  background: #fff7f8;
+}
+
+.glowmist-benefits,
+.glowmist-reviews,
+.glowmist-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.glowmist-benefit,
+.glowmist-ingredient,
+.glowmist-review,
+.glowmist-step {
+  background: var(--gm-cream);
+  border: 1px solid rgba(110, 58, 70, 0.12);
+  border-radius: 8px;
+  padding: 22px;
+}
+
+.glowmist-benefit-icon {
+  align-items: center;
+  background: var(--gm-blush);
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 1.15rem;
+  height: 42px;
+  justify-content: center;
+  margin-bottom: 18px;
+  width: 42px;
+}
+
+.glowmist-benefit h3,
+.glowmist-ingredient h3,
+.glowmist-review h3,
+.glowmist-step h3 {
+  font-size: 1.04rem;
+  margin-bottom: 8px;
+}
+
+.glowmist-benefit p,
+.glowmist-ingredient p,
+.glowmist-step p,
+.glowmist-review blockquote {
+  color: var(--gm-muted);
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+.glowmist-split {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(26px, 5vw, 70px);
+  align-items: start;
+}
+
+.glowmist-ingredients {
+  display: grid;
+  gap: 14px;
+}
+
+.glowmist-ingredient,
+.glowmist-review,
+.glowmist-step {
+  background: #fff;
+}
+
+.glowmist-steps {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.glowmist-step span {
+  align-items: center;
+  background: var(--gm-berry);
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 900;
+  height: 36px;
+  justify-content: center;
+  margin-bottom: 16px;
+  width: 36px;
+}
+
+.glowmist-reviews {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.glowmist-review-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.glowmist-review-top img,
+.glowmist-review-top > span {
+  border-radius: 50%;
+  flex: 0 0 48px;
+  height: 48px;
+  object-fit: cover;
+  width: 48px;
+}
+
+.glowmist-review-top > span {
+  align-items: center;
+  background: var(--gm-blush);
+  display: inline-flex;
+  font-weight: 900;
+  justify-content: center;
+}
+
+.glowmist-review-top h3,
+.glowmist-review-top p {
+  margin-bottom: 0;
+}
+
+.glowmist-review-top p {
+  color: #d28a20;
+}
+
+.glowmist-faq-list {
+  display: grid;
+  gap: 10px;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.glowmist-faq-item {
+  background: #fff;
+  border: 1px solid rgba(110, 58, 70, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.glowmist-faq-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--gm-ink);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-weight: 900;
+  justify-content: space-between;
+  min-height: 62px;
+  padding: 0 18px;
+  text-align: left;
+  width: 100%;
+}
+
+.glowmist-faq-button span:last-child {
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.glowmist-faq-item.is-open .glowmist-faq-button span:last-child {
+  transform: rotate(45deg);
+}
+
+.glowmist-faq-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 220ms ease;
+}
+
+.glowmist-faq-panel p {
+  color: var(--gm-muted);
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 0 18px 18px;
+}
+
+.glowmist-sticky {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(110, 58, 70, 0.14);
+  border-radius: 8px 8px 0 0;
+  bottom: 0;
+  box-shadow: 0 -12px 34px rgba(110, 58, 70, 0.13);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  left: 50%;
+  max-width: 760px;
+  opacity: 0;
+  padding: 12px;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, 18px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  width: min(calc(100% - 24px), 760px);
+  z-index: 40;
+}
+
+.glowmist-sticky.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.glowmist-sticky div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.glowmist-sticky strong,
+.glowmist-sticky span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.glowmist-sticky span {
+  color: var(--gm-muted);
+  font-weight: 800;
+}
+
+@media (max-width: 989px) {
+  .glowmist-hero,
+  .glowmist-split {
+    grid-template-columns: 1fr;
+  }
+
+  .glowmist-hero {
+    min-height: auto;
+  }
+
+  .glowmist-hero-media {
+    order: -1;
+  }
+
+  .glowmist-benefits,
+  .glowmist-reviews {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .glowmist-hero h1 {
+    font-size: 2.55rem;
+  }
+
+  .glowmist-actions,
+  .glowmist-benefits,
+  .glowmist-reviews,
+  .glowmist-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .glowmist-quantity {
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+  }
+
+  .glowmist-sticky {
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .glowmist-sticky .glowmist-button {
+    min-width: 132px;
+    padding: 0 14px;
+  }
+}

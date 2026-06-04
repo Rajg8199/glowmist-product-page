@@ -1,0 +1,144 @@
+{{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'glowmist-landing.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign product = section.settings.product
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_title = section.settings.product_name
+  assign product_price = section.settings.price_text
+
+  if product != blank
+    assign product_title = product.title
+    assign product_price = selected_variant.price | money
+  endif
+%}
+
+<section
+  class="glowmist-section"
+  style="--gm-blush: {{ section.settings.color_blush }}; --gm-berry: {{ section.settings.color_berry }}; --gm-ink: {{ section.settings.color_ink }}; --gm-muted: {{ section.settings.color_muted }}; --gm-cream: {{ section.settings.color_cream }};"
+>
+  <div class="glowmist-announcement">{{ section.settings.announcement_text }}</div>
+
+  <div class="glowmist-container glowmist-hero" data-glowmist-hero>
+    <div>
+      <p class="glowmist-eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1>{{ section.settings.headline }}</h1>
+      <p class="glowmist-subheadline">{{ section.settings.subheadline }}</p>
+
+      <div class="glowmist-card glowmist-purchase" data-glowmist-cart>
+        <div>
+          <p class="glowmist-product-name">{{ product_title }}</p>
+          <div class="glowmist-price-row">
+            <span class="glowmist-price" data-glowmist-price>{{ product_price }}</span>
+            <span class="glowmist-offer">{{ section.settings.offer_text }}</span>
+          </div>
+        </div>
+
+        {% if product != blank and product.variants.size > 1 %}
+          <label class="glowmist-field">
+            <span>Variant</span>
+            <select data-glowmist-variant>
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  data-price="{{ variant.price | money }}"
+                  {% unless variant.available %}disabled{% endunless %}
+                  {% if variant.id == selected_variant.id %}selected{% endif %}
+                >
+                  {{ variant.title }}{% unless variant.available %} - Sold out{% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </label>
+        {% elsif selected_variant != blank %}
+          <input type="hidden" data-glowmist-variant value="{{ selected_variant.id }}">
+        {% endif %}
+
+        <div class="glowmist-actions">
+          <label class="glowmist-quantity">
+            <span>Qty</span>
+            <input data-glowmist-quantity type="number" min="1" value="1" inputmode="numeric">
+          </label>
+          <button
+            class="glowmist-button"
+            type="button"
+            data-glowmist-add
+            {% if product != blank and selected_variant.available == false %}disabled{% endif %}
+          >
+            <span data-glowmist-add-label>{{ section.settings.cta_text }}</span>
+          </button>
+        </div>
+        <p class="glowmist-message" data-glowmist-message role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="glowmist-secondary-actions">
+        <a href="#glowmist-ingredients">View Ingredients</a>
+        <a href="#glowmist-reviews">See Reviews</a>
+      </div>
+    </div>
+
+    <div class="glowmist-hero-media">
+      {% if section.settings.hero_image != blank %}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1200
+          | image_tag:
+            widths: '360, 540, 720, 960, 1200',
+            sizes: '(min-width: 990px) 46vw, 92vw',
+            loading: 'eager',
+            alt: product_title
+        }}
+      {% else %}
+        <img src="{{ 'glowmist-product.png' | asset_url }}" alt="{{ product_title | escape }}" width="1200" height="1200" loading="eager">
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="glowmist-trust">
+    {% for block in section.blocks %}
+      <span {{ block.shopify_attributes }}>{{ block.settings.title }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowMist hero",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "text", "id": "announcement_text", "label": "Announcement text", "default": "Free shipping on prepaid orders" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "GlowMist Hydrating Face Mist" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Instant Hydration. Natural Glow. Anytime." },
+    { "type": "textarea", "id": "subheadline", "label": "Subheadline", "default": "A premium face mist made for daily hydration, dewy skin, and quick refreshes between skincare steps, meetings, workouts, and travel." },
+    { "type": "text", "id": "product_name", "label": "Fallback product name", "default": "GlowMist Hydrating Face Mist" },
+    { "type": "text", "id": "price_text", "label": "Fallback price", "default": "₹999" },
+    { "type": "text", "id": "offer_text", "label": "Offer badge", "default": "Buy 2, Get 1 Free" },
+    { "type": "text", "id": "cta_text", "label": "CTA text", "default": "Add to Cart" },
+    { "type": "color", "id": "color_blush", "label": "Blush", "default": "#f7c8ce" },
+    { "type": "color", "id": "color_berry", "label": "Berry", "default": "#8f3d55" },
+    { "type": "color", "id": "color_ink", "label": "Ink", "default": "#33232a" },
+    { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#6d5961" },
+    { "type": "color", "id": "color_cream", "label": "Cream background", "default": "#fff8f6" }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Dermatologically tested" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GlowMist hero",
+      "blocks": [
+        { "type": "trust_badge", "settings": { "title": "Dermatologically tested" } },
+        { "type": "trust_badge", "settings": { "title": "No sticky residue" } },
+        { "type": "trust_badge", "settings": { "title": "Free prepaid shipping" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+{{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
+
+<section class="glowmist-section glowmist-soft">
+  <div class="glowmist-container">
+    <div class="glowmist-heading">
+      <p>{{ section.settings.kicker }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="glowmist-steps">
+      {% for block in section.blocks %}
+        <article class="glowmist-step" {{ block.shopify_attributes }}>
+          <span>{{ forloop.index }}</span>
+          <h3>{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowMist usage steps",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "How to use" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Three steps to a dewy refresh" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Spray on clean face" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Hold 8 to 10 inches away and mist evenly after cleansing." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GlowMist usage steps",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Spray on clean face", "text": "Hold 8 to 10 inches away and mist evenly after cleansing." } },
+        { "type": "step", "settings": { "title": "Let it absorb naturally", "text": "Allow the fine droplets to settle before serum, SPF, or makeup." } },
+        { "type": "step", "settings": { "title": "Use anytime", "text": "Refresh during commutes, office hours, workouts, or travel." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

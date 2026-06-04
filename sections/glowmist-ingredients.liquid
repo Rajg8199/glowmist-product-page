@@ -1,0 +1,52 @@
+{{ 'glowmist-landing.css' | asset_url | stylesheet_tag }}
+
+<section class="glowmist-section" id="glowmist-ingredients">
+  <div class="glowmist-container glowmist-split">
+    <div class="glowmist-heading glowmist-heading--left">
+      <p>{{ section.settings.kicker }}</p>
+      <h2>{{ section.settings.heading }}</h2>
+      <span>{{ section.settings.text }}</span>
+    </div>
+
+    <div class="glowmist-ingredients">
+      {% for block in section.blocks %}
+        <article class="glowmist-ingredient" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.name }}</h3>
+          <p>{{ block.settings.description }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowMist ingredients",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Ingredients" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Hydration-focused skincare actives" },
+    { "type": "textarea", "id": "text", "label": "Intro", "default": "GlowMist brings together calming botanicals and hydration support for skin that looks rested and feels comfortable." }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Aloe Vera" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Soothes and hydrates skin." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GlowMist ingredients",
+      "blocks": [
+        { "type": "ingredient", "settings": { "name": "Aloe Vera", "description": "Soothes and hydrates skin after cleansing or sun exposure." } },
+        { "type": "ingredient", "settings": { "name": "Rose Water", "description": "Refreshes, tones, and gives the mist its soft botanical feel." } },
+        { "type": "ingredient", "settings": { "name": "Hyaluronic Acid", "description": "Helps retain moisture for a plump, dewy look." } },
+        { "type": "ingredient", "settings": { "name": "Green Tea Extract", "description": "Supports the skin barrier with antioxidant care." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

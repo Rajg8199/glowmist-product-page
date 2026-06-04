@@ -4,11 +4,17 @@ Custom Shopify OS 2.0 landing page for the fictional D2C skincare brand GlowMist
 
 ## What is included
 
-- `sections/glowmist-product-landing.liquid`: custom editable Shopify section.
-- `templates/page.glowmist.json`: page template that loads the landing section with populated sample blocks.
-- `layout/theme.liquid`: minimal Shopify layout with basic SEO meta structure.
+- `sections/glowmist-hero.liquid`: hero, product selector, variant selector, quantity selector, AJAX Add to Cart, announcement bar, and trust badges.
+- `sections/glowmist-benefits.liquid`: editable benefits grid.
+- `sections/glowmist-ingredients.liquid`: editable ingredients section.
+- `sections/glowmist-usage.liquid`: editable 3-step usage section.
+- `sections/glowmist-reviews.liquid`: editable review cards with ratings and optional images.
+- `sections/glowmist-faq.liquid`: editable FAQ accordion.
+- `sections/glowmist-sticky-cart.liquid`: sticky Add to Cart bar.
+- `templates/page.glowmist.json`: page template that assembles the sections in conversion-focused order.
+- `assets/glowmist-landing.css`: shared responsive styling.
+- `assets/glowmist-landing.js`: shared FAQ, sticky bar, and AJAX cart behavior.
 - `assets/glowmist-product.png`: generated dummy product image for the fallback hero visual.
-- `config/settings_schema.json`: minimal theme metadata.
 
 ## Key features
 
@@ -25,7 +31,7 @@ Custom Shopify OS 2.0 landing page for the fictional D2C skincare brand GlowMist
 
 1. Upload this folder as a Shopify theme or copy the files into an existing OS 2.0 theme.
 2. In Shopify Admin, create a page and assign the `page.glowmist` template.
-3. Open the theme customizer and select the real GlowMist product in the section settings.
+3. Open the theme customizer and select the real GlowMist product in the hero and sticky cart section settings.
 4. Replace the fallback hero image if a production image is available.
 
 ## Cart drawer assumption
@@ -34,6 +40,6 @@ The section dispatches `cart:refresh` and `cart:open` events after a successful 
 
 ## Walkthrough notes
 
-- The main section schema contains settings for headline, subheadline, product selector, hero image, CTA text, colors, and reusable blocks.
-- Benefits, ingredients, reviews, FAQs, and trust badges are modeled as Shopify blocks so the merchant can add, remove, and reorder content.
+- The landing page is split into separate custom section files so each page area can be edited, reordered, or reused independently.
+- Benefits, ingredients, reviews, FAQs, usage steps, and trust badges are modeled as Shopify blocks so the merchant can add, remove, and reorder content.
 - The Add to Cart flow reads the selected variant ID and quantity, posts JSON to `/cart/add.js`, then shows a status message and emits cart drawer events.
