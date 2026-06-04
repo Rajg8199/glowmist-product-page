@@ -1,6 +1,520 @@
+{% doc %}
+  @prompt
+    Create a premium responsive "How to Use" section for a skincare product page.
+    
+    Section Title: How to Use
+    
+    Display 3 steps in a clean horizontal layout on desktop and stacked cards on mobile.
+    
+    Step 1:
+    
+    Icon: Spray Bottle
+    Title: Spray on Clean Face
+    Description: Apply a few sprays evenly on freshly cleansed skin.
+    
+    Step 2:
+    
+    Icon: Water Drop
+    Title: Let It Absorb Naturally
+    Description: Allow the mist to absorb completely without rubbing.
+    
+    Step 3:
+    
+    Icon: Clock
+    Title: Use Anytime During the Day
+    Description: Reapply whenever your skin needs hydration and refreshment.
+    
+    Design Requirements:
+    
+    Modern luxury skincare aesthetic
+    Soft neutral background (#F8F6F3)
+    Rounded cards (16px radius)
+    Subtle shadow
+    Minimal line icons
+    Center-aligned content
+    Smooth hover animation
+    Mobile responsive
+    Consistent spacing and typography
+    Optional small product image above the steps
+    
+    Add a subtle callout below:
+    "For best results, use daily as part of your skincare routine."
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-how-to-use-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.section_padding }}px 20px;
+  }
+
+  .ai-how-to-use-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-how-to-use-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .ai-how-to-use-product-image-{{ ai_gen_id }} {
+    margin-bottom: 24px;
+  }
+
+  .ai-how-to-use-product-image-{{ ai_gen_id }} img {
+    width: {{ block.settings.product_image_size }}px;
+    height: {{ block.settings.product_image_size }}px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .ai-how-to-use-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-how-to-use-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subtitle_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  .ai-how-to-use-steps-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+
+  .ai-how-to-use-step-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 40px 24px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-how-to-use-step-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-how-to-use-icon-{{ ai_gen_id }} {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    margin: 0 auto 24px;
+    color: {{ block.settings.icon_color }};
+  }
+
+  .ai-how-to-use-icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 1.5;
+  }
+
+  .ai-how-to-use-step-number-{{ ai_gen_id }} {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 50%;
+    background-color: {{ block.settings.icon_color }};
+    color: {{ block.settings.card_background }};
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .ai-how-to-use-step-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.step_title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  .ai-how-to-use-step-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.step_description_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  .ai-how-to-use-callout-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 20px;
+    background-color: {{ block.settings.callout_background }};
+    border-radius: 12px;
+    border-left: 4px solid {{ block.settings.icon_color }};
+  }
+
+  .ai-how-to-use-callout-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.callout_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-how-to-use-steps-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .ai-how-to-use-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding | times: 0.7 }}px 16px;
+    }
+
+    .ai-how-to-use-header-{{ ai_gen_id }} {
+      margin-bottom: 32px;
+    }
+
+    .ai-how-to-use-step-{{ ai_gen_id }} {
+      padding: 32px 20px;
+    }
+  }
+{% endstyle %}
+
+<how-to-use-{{ ai_gen_id }} class="ai-how-to-use-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-how-to-use-container-{{ ai_gen_id }}">
+    <div class="ai-how-to-use-header-{{ ai_gen_id }}">
+      {% if block.settings.product_image %}
+        <div class="ai-how-to-use-product-image-{{ ai_gen_id }}">
+          <img
+            src="{{ block.settings.product_image | image_url: width: 400 }}"
+            alt="{{ block.settings.product_image.alt | escape }}"
+            loading="lazy"
+            width="400"
+            height="400"
+          >
+        </div>
+      {% endif %}
+      
+      {% if block.settings.section_title != blank %}
+        <h2 class="ai-how-to-use-title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+      {% endif %}
+      
+      {% if block.settings.section_subtitle != blank %}
+        <p class="ai-how-to-use-subtitle-{{ ai_gen_id }}">{{ block.settings.section_subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="ai-how-to-use-steps-{{ ai_gen_id }}">
+      <div class="ai-how-to-use-step-{{ ai_gen_id }}">
+        <div class="ai-how-to-use-icon-{{ ai_gen_id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M7 22V11M2 13v6c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2ZM22 13v6c0 1.1-.9 2-2 2h-2a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2Z"/>
+            <path d="M7 11V8a5 5 0 0 1 10 0v3"/>
+          </svg>
+        </div>
+        <div class="ai-how-to-use-step-number-{{ ai_gen_id }}">1</div>
+        <h3 class="ai-how-to-use-step-title-{{ ai_gen_id }}">{{ block.settings.step_1_title }}</h3>
+        <p class="ai-how-to-use-step-description-{{ ai_gen_id }}">{{ block.settings.step_1_description }}</p>
+      </div>
+
+      <div class="ai-how-to-use-step-{{ ai_gen_id }}">
+        <div class="ai-how-to-use-icon-{{ ai_gen_id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="ai-how-to-use-step-number-{{ ai_gen_id }}">2</div>
+        <h3 class="ai-how-to-use-step-title-{{ ai_gen_id }}">{{ block.settings.step_2_title }}</h3>
+        <p class="ai-how-to-use-step-description-{{ ai_gen_id }}">{{ block.settings.step_2_description }}</p>
+      </div>
+
+      <div class="ai-how-to-use-step-{{ ai_gen_id }}">
+        <div class="ai-how-to-use-icon-{{ ai_gen_id }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="ai-how-to-use-step-number-{{ ai_gen_id }}">3</div>
+        <h3 class="ai-how-to-use-step-title-{{ ai_gen_id }}">{{ block.settings.step_3_title }}</h3>
+        <p class="ai-how-to-use-step-description-{{ ai_gen_id }}">{{ block.settings.step_3_description }}</p>
+      </div>
+    </div>
+
+    {% if block.settings.callout_text != blank %}
+      <div class="ai-how-to-use-callout-{{ ai_gen_id }}">
+        <p class="ai-how-to-use-callout-text-{{ ai_gen_id }}">{{ block.settings.callout_text }}</p>
+      </div>
+    {% endif %}
+  </div>
+</how-to-use-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class HowToUse{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        const steps = this.querySelectorAll('.ai-how-to-use-step-{{ ai_gen_id }}');
+        steps.forEach((step, index) => {
+          step.setAttribute('role', 'article');
+          step.setAttribute('aria-label', `Step ${index + 1}`);
+        });
+      }
+    }
+
+    customElements.define('how-to-use-{{ ai_gen_id }}', HowToUse{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "How to use",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Title",
+      "default": "How to Use"
+    },
+    {
+      "type": "text",
+      "id": "section_subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image"
+    },
+    {
+      "type": "range",
+      "id": "product_image_size",
+      "label": "Product image size",
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Step 1"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Title",
+      "default": "Spray on Clean Face"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_description",
+      "label": "Description",
+      "default": "Apply a few sprays evenly on freshly cleansed skin."
+    },
+    {
+      "type": "header",
+      "content": "Step 2"
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Title",
+      "default": "Let It Absorb Naturally"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_description",
+      "label": "Description",
+      "default": "Allow the mist to absorb completely without rubbing."
+    },
+    {
+      "type": "header",
+      "content": "Step 3"
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Title",
+      "default": "Use Anytime During the Day"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_description",
+      "label": "Description",
+      "default": "Reapply whenever your skin needs hydration and refreshment."
+    },
+    {
+      "type": "header",
+      "content": "Callout"
+    },
+    {
+      "type": "text",
+      "id": "callout_text",
+      "label": "Callout text",
+      "default": "For best results, use daily as part of your skincare routine."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#F8F6F3"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title",
+      "default": "#2C2C2C"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#5A5A5A"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon",
+      "default": "#B8A398"
+    },
+    {
+      "type": "color",
+      "id": "callout_background",
+      "label": "Callout background",
+      "default": "#FFF9F5"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "step_title_size",
+      "label": "Step title size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "step_description_size",
+      "label": "Step description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "callout_size",
+      "label": "Callout size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 32,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "How to use"
+    }
+  ]
+}
 {% endschema %}
