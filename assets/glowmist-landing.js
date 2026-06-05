@@ -13,10 +13,7 @@
 
     if (!variantId || newQty == null) return;
 
-    // We already know the new total from the event — no extra fetch needed.
-    // Only bump when landing exactly at 2 (was <2, now =2).
-    // event fires AFTER Horizon has committed the change, so newQty IS
-    // the current cart quantity for this line.
+
     if (newQty === 2) {
       drawerBuyGuardBusy = true;
       try {
