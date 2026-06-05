@@ -249,29 +249,45 @@
 }
 
 /* ─── Form fields ─── */
-.glowmist-field,
-.glowmist-quantity {
-  display: grid;
-  gap: 7px;
+.glowmist-quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 12px;
+  overflow: hidden;
+  width: fit-content;
+  background: #fff;
 }
 
-.glowmist-field span,
-.glowmist-quantity span {
-  color: var(--gm-muted);
-  font-size: 0.78rem;
-  font-weight: 800;
+.glowmist-qty-btn {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease;
 }
 
-.glowmist-section select,
-.glowmist-section input {
-  border: 1px solid rgba(110, 58, 70, 0.2);
-  border-radius: 8px;
-  color: var(--gm-ink);
+.glowmist-qty-btn:hover {
+  background: rgba(0,0,0,.05);
+}
+
+.glowmist-quantity-selector input {
+  width: 60px;
+  height: 42px;
+  border: 0;
   text-align: center;
-  font: inherit;
-  min-height: 48px;
-  padding: 0 12px;
-  width: 100%;
+  font-weight: 600;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.glowmist-quantity-selector input::-webkit-outer-spin-button,
+.glowmist-quantity-selector input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .glowmist-actions {
