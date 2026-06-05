@@ -145,12 +145,27 @@
 }
 
 .glowmist-purchase {
-  border-radius: var(--gm-radius);
-  box-shadow: 0 10px 34px rgba(143, 61, 85, 0.1);
-  display: grid;
-  gap: 14px;
-  max-width: 560px;
-  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 28px;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.4);
+  box-shadow:
+    0 25px 60px rgba(143,61,85,.12),
+    0 8px 20px rgba(143,61,85,.08);
+}
+
+.glowmist-purchase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right,
+      rgba(247,200,206,.35),
+      transparent 40%);
+  pointer-events: none;
 }
 
 .glowmist-product-name {
