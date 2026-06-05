@@ -34,9 +34,6 @@
     }
   });
 
-  // Also intercept the fetch-level cart/change.js calls that Horizon's
-  // own qty stepper makes (+ and - buttons in the drawer). This catches
-  // cases where Horizon doesn't fire on:cart:add for stepper changes.
   const _origFetch = window.fetch;
   let   _interceptBusy = false;
 
