@@ -906,6 +906,9 @@
     gap: 28px;
     padding-top: 28px;
   }
+  .glowmist-quantity-selector input {
+    width: 30px;
+}
 
   .glowmist-hero h1 {
     font-size: clamp(1.75rem, 7vw, 2.5rem);
