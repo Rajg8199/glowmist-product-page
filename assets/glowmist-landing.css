@@ -317,7 +317,9 @@
 .glowmist-quantity {
   flex: 0 0 140px;
 }
-
+.glowmist-actions button.glowmist-button {
+    flex: 1;
+}
 
 @media (max-width: 768px) {
 
