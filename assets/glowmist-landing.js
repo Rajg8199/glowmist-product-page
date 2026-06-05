@@ -360,23 +360,30 @@
   } else {
     init();
   }
+const initCart = (root) => {
+  if (root.dataset.glowmistCartReady === 'true') return;
+  root.dataset.glowmistCartReady = 'true';
 
-  document.addEventListener("DOMContentLoaded", () => {
-  const qtyInput = document.querySelector("[data-glowmist-quantity]");
-  const plusBtn = document.querySelector("[data-glowmist-increase]");
-  const minusBtn = document.querySelector("[data-glowmist-decrease]");
+  const quantityInput = root.querySelector('[data-glowmist-quantity]');
+  const plusBtn = root.querySelector('[data-glowmist-increase]');
+  const minusBtn = root.querySelector('[data-glowmist-decrease]');
 
-  if (!qtyInput || !plusBtn || !minusBtn) return;
+  if (plusBtn && minusBtn && quantityInput) {
+    plusBtn.onclick = () => {
+      quantityInput.value =
+        parseInt(quantityInput.value || '1', 10) + 1;
+    };
 
-  plusBtn.addEventListener("click", () => {
-    qtyInput.value = parseInt(qtyInput.value || 1) + 1;
-  });
+    minusBtn.onclick = () => {
+      const current =
+        parseInt(quantityInput.value || '1', 10);
 
-  minusBtn.addEventListener("click", () => {
-    const current = parseInt(qtyInput.value || 1);
-    if (current > 1) {
-      qtyInput.value = current - 1;
-    }
-  });
-});
+      if (current > 1) {
+        quantityInput.value = current - 1;
+      }
+    };
+  }
+
+  // rest of your initCart code...
+};
 })();
