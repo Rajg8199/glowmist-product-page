@@ -139,11 +139,43 @@
     if (root.dataset.glowmistCartReady === 'true') return;
     root.dataset.glowmistCartReady = 'true';
 
-    const variantInput  = root.querySelector('[data-glowmist-variant]');
-    const quantityInput = root.querySelector('[data-glowmist-quantity]');
-    const priceTargets  = root.querySelectorAll('[data-glowmist-price]');
-    const message       = root.querySelector('[data-glowmist-message]');
-    const buttons       = root.querySelectorAll('[data-glowmist-add]');
+const variantInput  = root.querySelector('[data-glowmist-variant]');
+const quantityInput = root.querySelector('[data-glowmist-quantity]');
+const priceTargets  = root.querySelectorAll('[data-glowmist-price]');
+const message       = root.querySelector('[data-glowmist-message]');
+const buttons       = root.querySelectorAll('[data-glowmist-add]');
+
+const plusBtn = root.querySelector('[data-glowmist-increase]');
+const minusBtn = root.querySelector('[data-glowmist-decrease]');
+const qtyDisplay = root.querySelector('[data-glowmist-qty-display]');
+
+if (plusBtn && quantityInput) {
+  plusBtn.addEventListener('click', () => {
+    const qty = parseInt(quantityInput.value || '1', 10) + 1;
+
+    quantityInput.value = qty;
+
+    if (qtyDisplay) {
+      qtyDisplay.textContent = qty;
+    }
+  });
+}
+
+if (minusBtn && quantityInput) {
+  minusBtn.addEventListener('click', () => {
+    const current = parseInt(quantityInput.value || '1', 10);
+
+    if (current > 1) {
+      const qty = current - 1;
+
+      quantityInput.value = qty;
+
+      if (qtyDisplay) {
+        qtyDisplay.textContent = qty;
+      }
+    }
+  });
+}
 
     buttons.forEach((btn) => {
       if (btn.disabled) btn.dataset.disabled = 'true';
@@ -360,30 +392,4 @@
   } else {
     init();
   }
-const initCart = (root) => {
-  if (root.dataset.glowmistCartReady === 'true') return;
-  root.dataset.glowmistCartReady = 'true';
-
-  const quantityInput = root.querySelector('[data-glowmist-quantity]');
-  const plusBtn = root.querySelector('[data-glowmist-increase]');
-  const minusBtn = root.querySelector('[data-glowmist-decrease]');
-
-  if (plusBtn && minusBtn && quantityInput) {
-    plusBtn.onclick = () => {
-      quantityInput.value =
-        parseInt(quantityInput.value || '1', 10) + 1;
-    };
-
-    minusBtn.onclick = () => {
-      const current =
-        parseInt(quantityInput.value || '1', 10);
-
-      if (current > 1) {
-        quantityInput.value = current - 1;
-      }
-    };
-  }
-
-  // rest of your initCart code...
-};
 })();
