@@ -289,6 +289,15 @@
   -webkit-appearance: none;
   margin: 0;
 }
+.glowmist-quantity-selector input {
+  width: 60px;
+  height: 42px;
+  border: 0;
+  text-align: center;
+  font-weight: 600;
+  pointer-events: none;
+  background: transparent;
+}
 
 .glowmist-actions {
   display: grid;
