@@ -8,7 +8,6 @@
   assign product_price = section.settings.price_text
   assign has_compare_price = false
   assign show_scarcity = false
-  assign slide_count = 0
 
   if product != blank
     assign product_title = product.title
@@ -25,12 +24,6 @@
       assign show_scarcity = true
     endif
   endif
-
-  for block in section.blocks
-    if block.type == 'hero_slide'
-      assign slide_count = slide_count | plus: 1
-    endif
-  endfor
 %}
 
 <section
@@ -40,6 +33,97 @@
   <div class="glowmist-announcement">{{ section.settings.announcement_text }}</div>
 
   <div class="glowmist-container glowmist-hero" data-glowmist-hero>
+
+    <!-- LEFT SIDE: Product Image Carousel -->
+    <div class="glowmist-hero-media">
+      <div class="glowmist-benefit-chip glowmist-benefit-chip--tl" aria-hidden="true">
+        <span class="glowmist-benefit-chip__icon">+</span>
+        <span>Instant Hydration</span>
+      </div>
+      <div class="glowmist-benefit-chip glowmist-benefit-chip--tr" aria-hidden="true">
+        <span class="glowmist-benefit-chip__icon">+</span>
+        <span>Natural Ingredients</span>
+      </div>
+      <div class="glowmist-benefit-chip glowmist-benefit-chip--bl" aria-hidden="true">
+        <span class="glowmist-benefit-chip__icon">+</span>
+        <span>Alcohol-Free</span>
+      </div>
+      <div class="glowmist-benefit-chip glowmist-benefit-chip--br" aria-hidden="true">
+        <span class="glowmist-benefit-chip__icon">+</span>
+        <span>Dermatologist Tested</span>
+      </div>
+
+      <div class="glowmist-hero-carousel" data-glowmist-carousel>
+        <div class="glowmist-hero-carousel__track" data-glowmist-carousel-track>
+
+          {% if product != blank and product.images.size > 0 %}
+
+            {% for image in product.images %}
+              <div class="glowmist-hero-carousel__slide" data-glowmist-carousel-slide>
+                {{
+                  image
+                  | image_url: width: 1600
+                  | image_tag:
+                    widths: '400,600,800,1200,1600',
+                    sizes: '(min-width: 990px) 50vw,100vw',
+                    loading: 'lazy',
+                    alt: product.title
+                }}
+              </div>
+            {% endfor %}
+
+          {% elsif section.settings.hero_image != blank %}
+
+            <div class="glowmist-hero-carousel__slide" data-glowmist-carousel-slide>
+              {{
+                section.settings.hero_image
+                | image_url: width: 1600
+                | image_tag:
+                  widths: '400,600,800,1200,1600',
+                  sizes: '(min-width: 990px) 50vw,100vw',
+                  loading: 'eager',
+                  alt: product_title
+              }}
+            </div>
+
+          {% else %}
+
+            <div class="glowmist-hero-carousel__slide" data-glowmist-carousel-slide>
+              <img src="{{ 'glowmist-product.png' | asset_url }}" alt="{{ product_title | escape }}" width="1200" height="1200" loading="eager">
+            </div>
+
+          {% endif %}
+
+        </div>
+
+        {% if product != blank and product.images.size > 1 %}
+          <button
+            class="glowmist-carousel-button glowmist-carousel-button--prev"
+            type="button"
+            data-glowmist-carousel-prev
+            aria-label="Previous image"
+          >‹</button>
+
+          <button
+            class="glowmist-carousel-button glowmist-carousel-button--next"
+            type="button"
+            data-glowmist-carousel-next
+            aria-label="Next image"
+          >›</button>
+
+          <div class="glowmist-carousel-dots" data-glowmist-carousel-dots aria-label="Hero image carousel pagination"></div>
+        {% endif %}
+      </div>
+
+      <div class="glowmist-mobile-benefits" aria-hidden="true">
+        <span class="glowmist-mobile-benefit-tag">Hydrating</span>
+        <span class="glowmist-mobile-benefit-tag">Natural</span>
+        <span class="glowmist-mobile-benefit-tag">Alcohol-Free</span>
+        <span class="glowmist-mobile-benefit-tag">Derm-Tested</span>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: Content & Purchase -->
     <div class="glowmist-hero-content">
       <p class="glowmist-eyebrow">{{ section.settings.eyebrow }}</p>
       <h1>{{ section.settings.headline }}</h1>
@@ -137,100 +221,6 @@
       </div>
     </div>
 
-    <div class="glowmist-hero-media">
-      <div class="glowmist-benefit-chip glowmist-benefit-chip--tl" aria-hidden="true">
-        <span class="glowmist-benefit-chip__icon">+</span>
-        <span>Instant Hydration</span>
-      </div>
-      <div class="glowmist-benefit-chip glowmist-benefit-chip--tr" aria-hidden="true">
-        <span class="glowmist-benefit-chip__icon">+</span>
-        <span>Natural Ingredients</span>
-      </div>
-      <div class="glowmist-benefit-chip glowmist-benefit-chip--bl" aria-hidden="true">
-        <span class="glowmist-benefit-chip__icon">+</span>
-        <span>Alcohol-Free</span>
-      </div>
-      <div class="glowmist-benefit-chip glowmist-benefit-chip--br" aria-hidden="true">
-        <span class="glowmist-benefit-chip__icon">+</span>
-        <span>Dermatologist Tested</span>
-      </div>
-
-      <div class="glowmist-hero-carousel" data-glowmist-carousel>
-        <div class="glowmist-hero-carousel__track" data-glowmist-carousel-track>
-          {% if slide_count > 0 %}
-            {% assign rendered_slide_count = 0 %}
-            {% for block in section.blocks %}
-              {% if block.type == 'hero_slide' %}
-                {% assign rendered_slide_count = rendered_slide_count | plus: 1 %}
-                {% assign slide_loading = 'lazy' %}
-                {% if rendered_slide_count == 1 %}
-                  {% assign slide_loading = 'eager' %}
-                {% endif %}
-                {% assign slide_alt = block.settings.alt_text | default: product_title %}
-                <div class="glowmist-hero-carousel__slide" data-glowmist-carousel-slide {{ block.shopify_attributes }}>
-                  {% if block.settings.image != blank %}
-                    {{
-                      block.settings.image
-                      | image_url: width: 1200
-                      | image_tag:
-                        widths: '360, 540, 720, 960, 1200',
-                        sizes: '(min-width: 990px) 46vw, 92vw',
-                        loading: slide_loading,
-                        alt: slide_alt
-                    }}
-                  {% elsif section.settings.hero_image != blank %}
-                    {{
-                      section.settings.hero_image
-                      | image_url: width: 1200
-                      | image_tag:
-                        widths: '360, 540, 720, 960, 1200',
-                        sizes: '(min-width: 990px) 46vw, 92vw',
-                        loading: slide_loading,
-                        alt: slide_alt
-                    }}
-                  {% else %}
-                    <img src="{{ 'glowmist-product.png' | asset_url }}" alt="{{ block.settings.alt_text | default: product_title | escape }}" width="1200" height="1200" loading="{{ slide_loading }}">
-                  {% endif %}
-
-                  {% if block.settings.caption != blank %}
-                    <p class="glowmist-hero-carousel__caption">{{ block.settings.caption }}</p>
-                  {% endif %}
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% else %}
-            <div class="glowmist-hero-carousel__slide" data-glowmist-carousel-slide>
-              {% if section.settings.hero_image != blank %}
-                {{
-                  section.settings.hero_image
-                  | image_url: width: 1200
-                  | image_tag:
-                    widths: '360, 540, 720, 960, 1200',
-                    sizes: '(min-width: 990px) 46vw, 92vw',
-                    loading: 'eager',
-                    alt: product_title
-                }}
-              {% else %}
-                <img src="{{ 'glowmist-product.png' | asset_url }}" alt="{{ product_title | escape }}" width="1200" height="1200" loading="eager">
-              {% endif %}
-            </div>
-          {% endif %}
-        </div>
-
-        {% if slide_count > 1 %}
-          <button class="glowmist-carousel-button glowmist-carousel-button--prev" type="button" data-glowmist-carousel-prev aria-label="Previous image">‹</button>
-          <button class="glowmist-carousel-button glowmist-carousel-button--next" type="button" data-glowmist-carousel-next aria-label="Next image">›</button>
-          <div class="glowmist-carousel-dots" data-glowmist-carousel-dots aria-label="Hero image carousel pagination"></div>
-        {% endif %}
-      </div>
-
-      <div class="glowmist-mobile-benefits" aria-hidden="true">
-        <span class="glowmist-mobile-benefit-tag">Hydrating</span>
-        <span class="glowmist-mobile-benefit-tag">Natural</span>
-        <span class="glowmist-mobile-benefit-tag">Alcohol-Free</span>
-        <span class="glowmist-mobile-benefit-tag">Derm-Tested</span>
-      </div>
-    </div>
   </div>
 
   <div class="glowmist-trust">
@@ -247,7 +237,7 @@
   "name": "GlowMist hero",
   "settings": [
     { "type": "product", "id": "product", "label": "Product" },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Fallback hero image" },
     { "type": "text", "id": "announcement_text", "label": "Announcement text", "default": "Free shipping on prepaid orders" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "GlowMist Hydrating Face Mist" },
     { "type": "text", "id": "headline", "label": "Headline", "default": "Instant Hydration. Natural Glow. Anytime." },
@@ -268,15 +258,6 @@
   ],
   "blocks": [
     {
-      "type": "hero_slide",
-      "name": "Hero carousel image",
-      "settings": [
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "alt_text", "label": "Alt text", "default": "GlowMist Hydrating Face Mist" },
-        { "type": "text", "id": "caption", "label": "Caption", "default": "Hydration that goes anywhere" }
-      ]
-    },
-    {
       "type": "trust_badge",
       "name": "Trust badge",
       "settings": [
@@ -288,9 +269,6 @@
     {
       "name": "GlowMist hero",
       "blocks": [
-        { "type": "hero_slide", "settings": { "caption": "Instant hydration in a fine mist" } },
-        { "type": "hero_slide", "settings": { "caption": "Fresh glow for work, travel, and makeup prep" } },
-        { "type": "hero_slide", "settings": { "caption": "Lightweight skincare for daily touch-ups" } },
         { "type": "trust_badge", "settings": { "title": "Dermatologically tested" } },
         { "type": "trust_badge", "settings": { "title": "No sticky residue" } },
         { "type": "trust_badge", "settings": { "title": "Free prepaid shipping" } }
