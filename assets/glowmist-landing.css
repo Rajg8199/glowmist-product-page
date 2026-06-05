@@ -298,21 +298,30 @@
 
 /* ─── CTA button ─── */
 .glowmist-button {
-  appearance: none;
-  background: var(--gm-berry);
-  border: 0;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(143, 61, 85, 0.26);
-  color: #fff;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.96rem;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  min-height: 56px;
-  padding: 0 22px;
-  text-transform: uppercase;
-  transition: transform 180ms ease, opacity 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  min-height: 62px;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8f3d55,
+      #c65f7f
+    );
+
+  color: white;
+  font-weight: 800;
+  font-size: 15px;
+
+  box-shadow:
+    0 15px 35px rgba(143,61,85,.25);
+
+  transition: all .3s ease;
+}
+
+.glowmist-button:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 25px 50px rgba(143,61,85,.35);
 }
 
 .glowmist-button:hover:not(:disabled) {
