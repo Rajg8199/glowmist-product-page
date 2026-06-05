@@ -63,13 +63,28 @@
 
         setMessage('Added to cart! Your GlowMist is waiting at checkout.', 'success');
 
-        // ── Horizon theme: dispatch cart:update with the correct source ──
-        // Horizon listens for this exact CustomEvent on `document`.
-        // The source 'product-form-component' tells Horizon to both
-        // re-fetch the cart contents AND open the drawer automatically.
-        // Confirmed working on Horizon 3.0+ (Shopify dev forum, Nov 2025).
+        // ── Step 1: Fetch fresh cart JSON ──
         const cartData = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ item_count: quantity }));
 
+        // ── Step 2: Try Horizon's native @theme/events CartUpdateEvent ──
+        // This refreshes the drawer HTML and (if auto-open is enabled in theme
+        // settings) opens it. We attempt this first, then force-open regardless.
+        try {
+          const { CartUpdateEvent } = await import('@theme/events');
+          const event = new CartUpdateEvent(cartData, 'product-form-component', {
+            itemCount: cartData.item_count,
+            source: 'product-form-component',
+            sections: {},
+          });
+          document.dispatchEvent(event);
+        } catch (_) {
+          // @theme/events unavailable on this Horizon version — fall through
+        }
+
+        // ── Step 3: Also fire the cart:update CustomEvent ──
+        // Confirmed working on Horizon 3.0+ (Shopify dev forum, Nov 2025).
+        // The source 'product-form-component' is the magic string Horizon
+        // checks to decide whether to re-render the drawer contents.
         document.dispatchEvent(
           new CustomEvent('cart:update', {
             bubbles: true,
@@ -82,12 +97,24 @@
           })
         );
 
-        // ── Fallback: also set open = true on cart-drawer directly ──
-        // Works for Horizon versions where cart:update alone doesn't open the panel.
-        const horizonDrawer = document.querySelector('cart-drawer-component') ?? document.querySelector('cart-drawer');
+        // ── Step 4: Force-open the drawer unconditionally ──
+        // cartDrawer.open() normally only fires when the theme setting
+        // "auto-open cart drawer" is enabled. We bypass that check entirely
+        // and open regardless, which is what the user always wants on ATC.
+        const horizonDrawer =
+          document.querySelector('cart-drawer-component') ??
+          document.querySelector('cart-drawer');
+
         if (horizonDrawer) {
-          // Small delay so Horizon's cart:update handler can re-render first
-          setTimeout(() => { horizonDrawer.open = true; }, 80);
+          // Wait one frame so Horizon's cart:update handler can inject
+          // fresh HTML into the drawer before it slides open.
+          requestAnimationFrame(() => {
+            if (typeof horizonDrawer.open === 'function') {
+              horizonDrawer.open();
+            } else {
+              horizonDrawer.open = true;
+            }
+          });
         }
       } catch (error) {
         setMessage(error.message, 'error');
