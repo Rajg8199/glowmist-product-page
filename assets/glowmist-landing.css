@@ -417,14 +417,16 @@
 }
 
 .glowmist-hero-carousel img {
-  aspect-ratio: 1;
-  border-radius: 16px;
-  box-shadow: 0 28px 80px rgba(110, 58, 70, 0.17);
-  display: block;
-  height: auto;
-  max-width: 100%;
-  object-fit: cover;
   width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+
+  border-radius: 32px;
+
+  box-shadow:
+    0 40px 90px rgba(143,61,85,.18);
+
+  background: white;
 }
 
 .glowmist-hero-carousel__caption {
