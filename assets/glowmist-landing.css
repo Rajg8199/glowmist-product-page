@@ -318,9 +318,6 @@
   flex: 0 0 140px;
 }
 
-.glowmist-button {
-  flex: 1;
-}
 
 @media (max-width: 768px) {
 
