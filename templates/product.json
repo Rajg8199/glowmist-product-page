@@ -564,7 +564,7 @@
       "type": "glowmist-sticky-cart",
       "name": "GlowMist sticky cart",
       "settings": {
-        "product": "",
+        "product": "hydrating-face-mist",
         "product_name": "GlowMist Hydrating Face Mist",
         "price_text": "₹999",
         "cta_text": "Add to Cart"
