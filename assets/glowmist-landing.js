@@ -1,18 +1,8 @@
 (() => {
 
-  // ─────────────────────────────────────────────────────────────
-  // SHARED: Buy 2 Get 1 Free — drawer quantity watcher
-  // Intercepts Horizon's own cart events so that bumping qty in
-  // the drawer also triggers the free item logic.
-  // ─────────────────────────────────────────────────────────────
 
-  // Guard against re-entrant calls (our own /cart/change.js bump
-  // would otherwise trigger the listener again, causing a loop).
   let drawerBuyGuardBusy = false;
 
-  // Horizon fires 'on:cart:add' on document after any cart mutation
-  // (qty stepper in drawer, quick-buy, etc.).
-  // event.detail = { variantId, quantity } — the NEW total quantity.
   document.addEventListener('on:cart:add', async (event) => {
     if (drawerBuyGuardBusy) return;
 
