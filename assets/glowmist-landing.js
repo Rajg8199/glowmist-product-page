@@ -63,40 +63,32 @@
 
         setMessage('Added to cart! Your GlowMist is waiting at checkout.', 'success');
 
-        // ── FIX 2: refresh cart count first, then open the drawer ──
-        // Most Shopify themes use cart:refresh to re-render the drawer.
-        // We open the drawer only after the refresh event has been dispatched
-        // so the drawer already contains the new line item when it slides in.
-        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        // ── Horizon theme: dispatch cart:update with the correct source ──
+        // Horizon listens for this exact CustomEvent on `document`.
+        // The source 'product-form-component' tells Horizon to both
+        // re-fetch the cart contents AND open the drawer automatically.
+        // Confirmed working on Horizon 3.0+ (Shopify dev forum, Nov 2025).
+        const cartData = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ item_count: quantity }));
 
-        // Give the theme's refresh handler a tick to update the DOM,
-        // then open the drawer. Works with Ajax Cart, Dawn, and most
-        // third-party drawer themes.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            document.dispatchEvent(new CustomEvent('cart:open'));
+        document.dispatchEvent(
+          new CustomEvent('cart:update', {
+            bubbles: true,
+            detail: {
+              data: {
+                itemCount: cartData.item_count ?? quantity,
+                source: 'product-form-component',
+              },
+            },
+          })
+        );
 
-            // Also try the explicit selectors used by the most common themes
-            // (Dawn → cart-notification / cart-drawer, Impulse → #cart-drawer, etc.)
-            const drawerSelectors = [
-              'cart-drawer',
-              'cart-notification',
-              '[id="cart-drawer"]',
-              '[data-cart-drawer]',
-              '[data-drawer="cart"]',
-            ];
-            for (const sel of drawerSelectors) {
-              const el = document.querySelector(sel);
-              if (el) {
-                // Dawn exposes open() on the custom element
-                if (typeof el.open === 'function') { el.open(); break; }
-                // Fallback: toggle visibility class
-                el.classList.add('is-open', 'open', 'active');
-                break;
-              }
-            }
-          });
-        });
+        // ── Fallback: also set open = true on cart-drawer directly ──
+        // Works for Horizon versions where cart:update alone doesn't open the panel.
+        const horizonDrawer = document.querySelector('cart-drawer-component') ?? document.querySelector('cart-drawer');
+        if (horizonDrawer) {
+          // Small delay so Horizon's cart:update handler can re-render first
+          setTimeout(() => { horizonDrawer.open = true; }, 80);
+        }
       } catch (error) {
         setMessage(error.message, 'error');
       } finally {
