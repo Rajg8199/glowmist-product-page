@@ -1,4 +1,156 @@
 (() => {
+
+  // ─────────────────────────────────────────────────────────────
+  // SHARED: Buy 2 Get 1 Free — drawer quantity watcher
+  // Intercepts Horizon's own cart events so that bumping qty in
+  // the drawer also triggers the free item logic.
+  // ─────────────────────────────────────────────────────────────
+
+  // Guard against re-entrant calls (our own /cart/change.js bump
+  // would otherwise trigger the listener again, causing a loop).
+  let drawerBuyGuardBusy = false;
+
+  // Horizon fires 'on:cart:add' on document after any cart mutation
+  // (qty stepper in drawer, quick-buy, etc.).
+  // event.detail = { variantId, quantity } — the NEW total quantity.
+  document.addEventListener('on:cart:add', async (event) => {
+    if (drawerBuyGuardBusy) return;
+
+    const variantId = event?.detail?.variantId
+                   ?? event?.detail?.variant_id
+                   ?? event?.detail?.id;
+    const newQty    = event?.detail?.quantity ?? event?.detail?.item_count;
+
+    if (!variantId || newQty == null) return;
+
+    // We already know the new total from the event — no extra fetch needed.
+    // Only bump when landing exactly at 2 (was <2, now =2).
+    // event fires AFTER Horizon has committed the change, so newQty IS
+    // the current cart quantity for this line.
+    if (newQty === 2) {
+      drawerBuyGuardBusy = true;
+      try {
+        await fetch('/cart/change.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ id: String(variantId), quantity: 3 }),
+        });
+
+        // Re-render the drawer so it shows qty 3 + the discount badge
+        await refreshHorizonDrawer();
+      } catch (_) {
+        // silently ignore — worst case customer sees qty 2, still gets
+        // the Shopify automatic discount at checkout
+      } finally {
+        drawerBuyGuardBusy = false;
+      }
+    }
+  });
+
+  // Also intercept the fetch-level cart/change.js calls that Horizon's
+  // own qty stepper makes (+ and - buttons in the drawer). This catches
+  // cases where Horizon doesn't fire on:cart:add for stepper changes.
+  const _origFetch = window.fetch;
+  let   _interceptBusy = false;
+
+  window.fetch = async function (...args) {
+    const url     = typeof args[0] === 'string' ? args[0] : args[0]?.url ?? '';
+    const isChange = url.includes('/cart/change.js') || url.includes('/cart/update.js');
+
+    // Let the original request through first
+    const result = await _origFetch.apply(this, args);
+
+    // Only react to drawer qty changes, not our own bump calls
+    if (isChange && !_interceptBusy && !drawerBuyGuardBusy) {
+      // Clone the response so we can read it without consuming it
+      const clone = result.clone();
+      clone.json().then(async (cart) => {
+        if (!Array.isArray(cart?.items)) return;
+
+        // Parse the body of the original request to know which variant changed
+        let changedId  = null;
+        let changedQty = null;
+        try {
+          const body = typeof args[1]?.body === 'string'
+            ? JSON.parse(args[1].body)
+            : null;
+          changedId  = body?.id ?? body?.line;
+          changedQty = body?.quantity;
+        } catch (_) {}
+
+        if (changedId == null || changedQty == null) return;
+
+        // Find the item in the returned cart by variant_id or line key
+        const item = cart.items.find(
+          (i) => String(i.variant_id) === String(changedId)
+               || String(i.key)        === String(changedId)
+               || i.line               === changedId
+        );
+
+        if (!item) return;
+
+        // Only bump when the returned cart shows exactly 2 of this variant
+        if (item.quantity === 2) {
+          _interceptBusy = true;
+          try {
+            await _origFetch('/cart/change.js', {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body:    JSON.stringify({ id: String(item.variant_id), quantity: 3 }),
+            });
+            await refreshHorizonDrawer();
+          } catch (_) {}
+          finally { _interceptBusy = false; }
+        }
+      }).catch(() => {});
+    }
+
+    return result;
+  };
+
+  // ── Refresh the Horizon drawer HTML without opening it ──
+  const refreshHorizonDrawer = async () => {
+    const cartData = await _origFetch('/cart.js').then((r) => r.json()).catch(() => ({}));
+
+    try {
+      const { CartUpdateEvent } = await import('@theme/events');
+      document.dispatchEvent(
+        new CartUpdateEvent(cartData, 'product-form-component', {
+          itemCount: cartData.item_count,
+          source: 'product-form-component',
+          sections: {},
+        })
+      );
+    } catch (_) {}
+
+    document.dispatchEvent(
+      new CustomEvent('cart:update', {
+        bubbles: true,
+        detail: { data: { itemCount: cartData.item_count, source: 'product-form-component' } },
+      })
+    );
+  };
+
+  // ── Open the Horizon drawer (used after ATC from landing section) ──
+  const openHorizonDrawer = async () => {
+    await refreshHorizonDrawer();
+
+    const drawer =
+      document.querySelector('cart-drawer-component') ??
+      document.querySelector('cart-drawer');
+
+    if (drawer) {
+      requestAnimationFrame(() => {
+        if (typeof drawer.open === 'function') drawer.open();
+        else drawer.open = true;
+      });
+    }
+  };
+
+  // ─────────────────────────────────────────────────────────────
+  // SECTION: GlowMist landing page cart widget
+  // ─────────────────────────────────────────────────────────────
+
   const initCart = (root) => {
     if (root.dataset.glowmistCartReady === 'true') return;
     root.dataset.glowmistCartReady = 'true';
@@ -9,7 +161,6 @@
     const message       = root.querySelector('[data-glowmist-message]');
     const buttons       = root.querySelectorAll('[data-glowmist-add]');
 
-    // Remember which buttons were already disabled by Liquid (out of stock)
     buttons.forEach((btn) => {
       if (btn.disabled) btn.dataset.disabled = 'true';
       btn.dataset.defaultText = btn.querySelector('[data-glowmist-add-label]')?.textContent.trim()
@@ -31,73 +182,23 @@
       });
     };
 
-    // ── Notify Horizon's cart drawer to refresh + open ──
-    const openHorizonDrawer = async () => {
-      const cartData = await fetch('/cart.js').then((r) => r.json()).catch(() => ({}));
-
-      // Try native @theme/events (Horizon internal API)
-      try {
-        const { CartUpdateEvent } = await import('@theme/events');
-        document.dispatchEvent(
-          new CartUpdateEvent(cartData, 'product-form-component', {
-            itemCount: cartData.item_count,
-            source: 'product-form-component',
-            sections: {},
-          })
-        );
-      } catch (_) { /* unavailable on some Horizon versions */ }
-
-      // Fallback: cart:update CustomEvent (confirmed Horizon 3.0+)
-      document.dispatchEvent(
-        new CustomEvent('cart:update', {
-          bubbles: true,
-          detail: { data: { itemCount: cartData.item_count, source: 'product-form-component' } },
-        })
-      );
-
-      // Force-open the drawer regardless of theme "auto-open" setting
-      const drawer =
-        document.querySelector('cart-drawer-component') ??
-        document.querySelector('cart-drawer');
-
-      if (drawer) {
-        requestAnimationFrame(() => {
-          if (typeof drawer.open === 'function') drawer.open();
-          else drawer.open = true;
-        });
-      }
-    };
-
-    // ── Buy 2 Get 1 Free ──
-    // We pass in preExistingQty (read BEFORE the add happened) so the
-    // calculation is based on what was in the cart before this click.
-    //
-    // Rule: only bump to 3 when the cart crosses from <2 to >=2 on THIS
-    // exact variant. Examples:
-    //   preExisting=0, adding=1  → new total=1  → no bonus
-    //   preExisting=0, adding=2  → new total=2  → bonus!  bump to 3
-    //   preExisting=1, adding=1  → new total=2  → bonus!  bump to 3
-    //   preExisting=1, adding=2  → new total=3  → no bonus (already past)
-    //   preExisting=2, adding=1  → new total=3  → no bonus
+    // Buy 2 Get 1 for the ATC button — uses pre-add snapshot so qty=1
+    // on an empty cart never incorrectly triggers the bonus.
     const applyBuy2Get1 = async (id, quantityAdded, preExistingQty) => {
       const totalBefore = preExistingQty;
       const totalAfter  = preExistingQty + quantityAdded;
 
-      // Trigger only when the add causes the total to land exactly at 2
-      // (i.e. was below 2, now is exactly 2)
       if (totalBefore < 2 && totalAfter === 2) {
-        await fetch('/cart/change.js', {
+        await _origFetch('/cart/change.js', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ id, quantity: 3 }),
         });
         return true;
       }
-
       return false;
     };
 
-    // One shared in-flight guard — concurrent clicks are ignored
     let isBusy = false;
 
     const addToCart = async () => {
@@ -116,13 +217,13 @@
       setMessage('');
 
       try {
-        // Step 1 — Snapshot the cart BEFORE adding so we know the pre-add qty
-        const cartBefore   = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ items: [] }));
-        const existingItem = cartBefore.items?.find((item) => String(item.variant_id) === String(id));
+        // Snapshot cart BEFORE add so pre-existing qty is accurate
+        const cartBefore     = await _origFetch('/cart.js').then((r) => r.json()).catch(() => ({ items: [] }));
+        const existingItem   = cartBefore.items?.find((i) => String(i.variant_id) === String(id));
         const preExistingQty = existingItem?.quantity ?? 0;
 
-        // Step 2 — Add the quantity the customer chose
-        const response = await fetch('/cart/add.js', {
+        // Add the customer's chosen quantity
+        const response = await _origFetch('/cart/add.js', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body:    JSON.stringify({ id, quantity }),
@@ -133,10 +234,11 @@
           throw new Error(err.description || 'Unable to add this product to cart.');
         }
 
-        // Step 3 — Check Buy 2 Get 1 using pre-add snapshot (not post-add cart)
+        // Bump to 3 if threshold hit (guarded against fetch interceptor)
+        _interceptBusy = true;
         const bonusAdded = await applyBuy2Get1(id, quantity, preExistingQty);
+        _interceptBusy = false;
 
-        // Step 4 — Show the right success message
         setMessage(
           bonusAdded
             ? '\uD83C\uDF81 1 free item added! Your Buy 2 Get 1 deal is applied.'
@@ -144,10 +246,10 @@
           'success'
         );
 
-        // Step 5 — Refresh and open the Horizon cart drawer
         await openHorizonDrawer();
 
       } catch (error) {
+        _interceptBusy = false;
         setMessage(error.message, 'error');
       } finally {
         setLoading(false);
@@ -155,12 +257,8 @@
       }
     };
 
-    // One listener per button — all call the same shared addToCart
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', addToCart);
-    });
+    buttons.forEach((btn) => btn.addEventListener('click', addToCart));
 
-    // Update displayed price when variant changes
     if (variantInput?.tagName === 'SELECT') {
       variantInput.addEventListener('change', () => {
         const selected  = variantInput.options[variantInput.selectedIndex];
@@ -169,6 +267,10 @@
       });
     }
   };
+
+  // ─────────────────────────────────────────────────────────────
+  // FAQ, Sticky bar, Carousel — unchanged
+  // ─────────────────────────────────────────────────────────────
 
   const initFaq = (root) => {
     if (root.dataset.glowmistFaqReady === 'true') return;
@@ -179,7 +281,6 @@
         const item   = button.closest('[data-glowmist-faq-item]');
         const panel  = item.querySelector('[data-glowmist-faq-panel]');
         const isOpen = button.getAttribute('aria-expanded') === 'true';
-
         button.setAttribute('aria-expanded', String(!isOpen));
         item.classList.toggle('is-open', !isOpen);
         panel.style.maxHeight = isOpen ? '0px' : `${panel.scrollHeight}px`;
