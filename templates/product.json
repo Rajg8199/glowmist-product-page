@@ -272,27 +272,6 @@
     "glowmist_hero_HiM9jf": {
       "type": "glowmist-hero",
       "blocks": {
-        "hero_slide_xzjndP": {
-          "type": "hero_slide",
-          "settings": {
-            "alt_text": "GlowMist Hydrating Face Mist",
-            "caption": "Instant hydration in a fine mist"
-          }
-        },
-        "hero_slide_aTeqc8": {
-          "type": "hero_slide",
-          "settings": {
-            "alt_text": "GlowMist Hydrating Face Mist",
-            "caption": "Fresh glow for work, travel, and makeup prep"
-          }
-        },
-        "hero_slide_gBwFAp": {
-          "type": "hero_slide",
-          "settings": {
-            "alt_text": "GlowMist Hydrating Face Mist",
-            "caption": "Lightweight skincare for daily touch-ups"
-          }
-        },
         "trust_badge_ghNycy": {
           "type": "trust_badge",
           "settings": {
@@ -313,9 +292,6 @@
         }
       },
       "block_order": [
-        "hero_slide_xzjndP",
-        "hero_slide_aTeqc8",
-        "hero_slide_gBwFAp",
         "trust_badge_ghNycy",
         "trust_badge_p789Tm",
         "trust_badge_6t3edY"
@@ -434,7 +410,7 @@
         "horizontal_alignment": "flex-start",
         "vertical_alignment": "center",
         "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
+        "horizontal_alignment_flex_direction_column": "center",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
         "section_width": "full-width",
