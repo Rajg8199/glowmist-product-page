@@ -87,7 +87,7 @@
 }
 
 .glowmist-hero h1 {
-  font-size: clamp(2rem, 4.5vw, 3.35rem);
+  font-size: 48px;
   font-weight: 900;
   line-height: 1.08;
   max-width: 620px;
