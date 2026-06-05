@@ -909,6 +909,9 @@
   .glowmist-secondary-actions {
     justify-content: center;
 }
+.glowmist-mobile-benefits {
+    gap: 4px;
+}
   .glowmist-quantity-selector input {
     width: 30px;
 }
