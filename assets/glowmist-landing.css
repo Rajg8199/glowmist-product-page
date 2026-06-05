@@ -845,6 +845,9 @@
   .glowmist-split {
     grid-template-columns: 1fr;
   }
+  .glowmist-quantity {
+    flex: 0;
+}
 
   .glowmist-hero {
     min-height: auto;
