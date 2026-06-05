@@ -145,27 +145,12 @@
 }
 
 .glowmist-purchase {
-  position: relative;
-  overflow: hidden;
-  border-radius: 28px;
-  padding: 28px;
-  background: rgba(255,255,255,.88);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,.4);
-  box-shadow:
-    0 25px 60px rgba(143,61,85,.12),
-    0 8px 20px rgba(143,61,85,.08);
-}
-
-.glowmist-purchase::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at top right,
-      rgba(247,200,206,.35),
-      transparent 40%);
-  pointer-events: none;
+  border-radius: var(--gm-radius);
+  box-shadow: 0 10px 34px rgba(143, 61, 85, 0.1);
+  display: grid;
+  gap: 14px;
+  max-width: 560px;
+  padding: 22px;
 }
 
 .glowmist-product-name {
@@ -298,30 +283,21 @@
 
 /* ─── CTA button ─── */
 .glowmist-button {
-  min-height: 62px;
-  border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8f3d55,
-      #c65f7f
-    );
-
-  color: white;
-  font-weight: 800;
-  font-size: 15px;
-
-  box-shadow:
-    0 15px 35px rgba(143,61,85,.25);
-
-  transition: all .3s ease;
-}
-
-.glowmist-button:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 25px 50px rgba(143,61,85,.35);
+  appearance: none;
+  background: var(--gm-berry);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(143, 61, 85, 0.26);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.96rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  min-height: 56px;
+  padding: 0 22px;
+  text-transform: uppercase;
+  transition: transform 180ms ease, opacity 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .glowmist-button:hover:not(:disabled) {
@@ -417,16 +393,14 @@
 }
 
 .glowmist-hero-carousel img {
-  width: 100%;
   aspect-ratio: 1;
+  border-radius: 16px;
+  box-shadow: 0 28px 80px rgba(110, 58, 70, 0.17);
+  display: block;
+  height: auto;
+  max-width: 100%;
   object-fit: cover;
-
-  border-radius: 32px;
-
-  box-shadow:
-    0 40px 90px rgba(143,61,85,.18);
-
-  background: white;
+  width: 100%;
 }
 
 .glowmist-hero-carousel__caption {
