@@ -269,22 +269,43 @@
         "padding-block-end": 0
       }
     },
-    "glowmist_hero_C7jc8d": {
+    "glowmist_hero_HiM9jf": {
       "type": "glowmist-hero",
       "blocks": {
-        "trust_badge_yfNfaT": {
+        "hero_slide_xzjndP": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist Hydrating Face Mist",
+            "caption": "Instant hydration in a fine mist"
+          }
+        },
+        "hero_slide_aTeqc8": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist Hydrating Face Mist",
+            "caption": "Fresh glow for work, travel, and makeup prep"
+          }
+        },
+        "hero_slide_gBwFAp": {
+          "type": "hero_slide",
+          "settings": {
+            "alt_text": "GlowMist Hydrating Face Mist",
+            "caption": "Lightweight skincare for daily touch-ups"
+          }
+        },
+        "trust_badge_ghNycy": {
           "type": "trust_badge",
           "settings": {
             "title": "Dermatologically tested"
           }
         },
-        "trust_badge_FaFzGq": {
+        "trust_badge_p789Tm": {
           "type": "trust_badge",
           "settings": {
             "title": "No sticky residue"
           }
         },
-        "trust_badge_AVcatY": {
+        "trust_badge_6t3edY": {
           "type": "trust_badge",
           "settings": {
             "title": "Free prepaid shipping"
@@ -292,9 +313,12 @@
         }
       },
       "block_order": [
-        "trust_badge_yfNfaT",
-        "trust_badge_FaFzGq",
-        "trust_badge_AVcatY"
+        "hero_slide_xzjndP",
+        "hero_slide_aTeqc8",
+        "hero_slide_gBwFAp",
+        "trust_badge_ghNycy",
+        "trust_badge_p789Tm",
+        "trust_badge_6t3edY"
       ],
       "name": "GlowMist hero",
       "settings": {
@@ -573,7 +597,7 @@
   },
   "order": [
     "main",
-    "glowmist_hero_C7jc8d",
+    "glowmist_hero_HiM9jf",
     "glowmist_benefits_the6qB",
     "17805964327c0ef360",
     "glowmist_ingredients_dwCWre",
