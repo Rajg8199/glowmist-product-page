@@ -586,7 +586,7 @@
 .glowmist-trust {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
   margin: -18px auto 52px;
   padding: 0 20px;
@@ -598,8 +598,8 @@
   border-radius: 999px;
   color: var(--gm-muted);
   font-size: 0.88rem;
-  font-weight: 800;
-  padding: 10px 14px;
+   font-size: 13px;
+    padding: 8px 12px;
 }
 
 /* ─── Section headings ─── */
