@@ -193,10 +193,37 @@
         {% endif %}
 
         <div class="glowmist-actions">
-          <label class="glowmist-quantity">
-            <span>Qty</span>
-            <input data-glowmist-quantity type="number" min="1" value="1" inputmode="numeric">
-          </label>
+   <label class="glowmist-quantity">
+  <span>Qty</span>
+
+  <div class="glowmist-quantity-selector">
+    <button
+      type="button"
+      class="glowmist-qty-btn"
+      data-glowmist-decrease
+      aria-label="Decrease quantity"
+    >
+      −
+    </button>
+
+    <input
+      data-glowmist-quantity
+      type="number"
+      min="1"
+      value="1"
+      inputmode="numeric"
+    >
+
+    <button
+      type="button"
+      class="glowmist-qty-btn"
+      data-glowmist-increase
+      aria-label="Increase quantity"
+    >
+      +
+    </button>
+  </div>
+</label>
           <button
             class="glowmist-button"
             type="button"
