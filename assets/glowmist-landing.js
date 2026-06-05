@@ -68,25 +68,30 @@
       }
     };
 
-    // ── Buy 2 Get 1 Free: bump quantity to 3 when cart hits exactly 2 ──
-    // Checks the live cart for how many of this exact variant already exist,
-    // adds what the customer chose, then silently bumps to 3 if the combined
-    // total is exactly 2. Shopify's automatic discount makes the 3rd item free.
-    const applyBuy2Get1 = async (id, quantityAdded) => {
-      const cart = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ items: [] }));
-      const existingItem = cart.items?.find((item) => String(item.variant_id) === String(id));
-      const existingQty  = existingItem?.quantity ?? 0;
-      const newTotal     = existingQty + quantityAdded;
+    // ── Buy 2 Get 1 Free ──
+    // We pass in preExistingQty (read BEFORE the add happened) so the
+    // calculation is based on what was in the cart before this click.
+    //
+    // Rule: only bump to 3 when the cart crosses from <2 to >=2 on THIS
+    // exact variant. Examples:
+    //   preExisting=0, adding=1  → new total=1  → no bonus
+    //   preExisting=0, adding=2  → new total=2  → bonus!  bump to 3
+    //   preExisting=1, adding=1  → new total=2  → bonus!  bump to 3
+    //   preExisting=1, adding=2  → new total=3  → no bonus (already past)
+    //   preExisting=2, adding=1  → new total=3  → no bonus
+    const applyBuy2Get1 = async (id, quantityAdded, preExistingQty) => {
+      const totalBefore = preExistingQty;
+      const totalAfter  = preExistingQty + quantityAdded;
 
-      // Only bump when the new total lands at exactly 2 so we add exactly 1
-      // bonus. This avoids re-triggering on a 3rd intentional purchase etc.
-      if (newTotal === 2) {
+      // Trigger only when the add causes the total to land exactly at 2
+      // (i.e. was below 2, now is exactly 2)
+      if (totalBefore < 2 && totalAfter === 2) {
         await fetch('/cart/change.js', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ id, quantity: 3 }),
         });
-        return true; // bonus item was silently added
+        return true;
       }
 
       return false;
@@ -111,7 +116,12 @@
       setMessage('');
 
       try {
-        // Step 1 — Add the quantity the customer chose
+        // Step 1 — Snapshot the cart BEFORE adding so we know the pre-add qty
+        const cartBefore   = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ items: [] }));
+        const existingItem = cartBefore.items?.find((item) => String(item.variant_id) === String(id));
+        const preExistingQty = existingItem?.quantity ?? 0;
+
+        // Step 2 — Add the quantity the customer chose
         const response = await fetch('/cart/add.js', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -123,10 +133,10 @@
           throw new Error(err.description || 'Unable to add this product to cart.');
         }
 
-        // Step 2 — Check if Buy 2 Get 1 threshold is hit; bump to 3 silently
-        const bonusAdded = await applyBuy2Get1(id, quantity);
+        // Step 3 — Check Buy 2 Get 1 using pre-add snapshot (not post-add cart)
+        const bonusAdded = await applyBuy2Get1(id, quantity, preExistingQty);
 
-        // Step 3 — Show the right success message
+        // Step 4 — Show the right success message
         setMessage(
           bonusAdded
             ? '\uD83C\uDF81 1 free item added! Your Buy 2 Get 1 deal is applied.'
@@ -134,7 +144,7 @@
           'success'
         );
 
-        // Step 4 — Refresh and open the Horizon cart drawer
+        // Step 5 — Refresh and open the Horizon cart drawer
         await openHorizonDrawer();
 
       } catch (error) {
