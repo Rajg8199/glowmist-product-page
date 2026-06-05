@@ -27,11 +27,72 @@
         btn.disabled = isLoading || btn.dataset.disabled === 'true';
         btn.classList.toggle('is-loading', isLoading);
         const label = btn.querySelector('[data-glowmist-add-label]');
-        if (label) label.textContent = isLoading ? 'Adding…' : btn.dataset.defaultText;
+        if (label) label.textContent = isLoading ? 'Adding\u2026' : btn.dataset.defaultText;
       });
     };
 
-    // ── FIX 1: one shared in-flight guard so concurrent clicks are ignored ──
+    // ── Notify Horizon's cart drawer to refresh + open ──
+    const openHorizonDrawer = async () => {
+      const cartData = await fetch('/cart.js').then((r) => r.json()).catch(() => ({}));
+
+      // Try native @theme/events (Horizon internal API)
+      try {
+        const { CartUpdateEvent } = await import('@theme/events');
+        document.dispatchEvent(
+          new CartUpdateEvent(cartData, 'product-form-component', {
+            itemCount: cartData.item_count,
+            source: 'product-form-component',
+            sections: {},
+          })
+        );
+      } catch (_) { /* unavailable on some Horizon versions */ }
+
+      // Fallback: cart:update CustomEvent (confirmed Horizon 3.0+)
+      document.dispatchEvent(
+        new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { data: { itemCount: cartData.item_count, source: 'product-form-component' } },
+        })
+      );
+
+      // Force-open the drawer regardless of theme "auto-open" setting
+      const drawer =
+        document.querySelector('cart-drawer-component') ??
+        document.querySelector('cart-drawer');
+
+      if (drawer) {
+        requestAnimationFrame(() => {
+          if (typeof drawer.open === 'function') drawer.open();
+          else drawer.open = true;
+        });
+      }
+    };
+
+    // ── Buy 2 Get 1 Free: bump quantity to 3 when cart hits exactly 2 ──
+    // Checks the live cart for how many of this exact variant already exist,
+    // adds what the customer chose, then silently bumps to 3 if the combined
+    // total is exactly 2. Shopify's automatic discount makes the 3rd item free.
+    const applyBuy2Get1 = async (id, quantityAdded) => {
+      const cart = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ items: [] }));
+      const existingItem = cart.items?.find((item) => String(item.variant_id) === String(id));
+      const existingQty  = existingItem?.quantity ?? 0;
+      const newTotal     = existingQty + quantityAdded;
+
+      // Only bump when the new total lands at exactly 2 so we add exactly 1
+      // bonus. This avoids re-triggering on a 3rd intentional purchase etc.
+      if (newTotal === 2) {
+        await fetch('/cart/change.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ id, quantity: 3 }),
+        });
+        return true; // bonus item was silently added
+      }
+
+      return false;
+    };
+
+    // One shared in-flight guard — concurrent clicks are ignored
     let isBusy = false;
 
     const addToCart = async () => {
@@ -50,6 +111,7 @@
       setMessage('');
 
       try {
+        // Step 1 — Add the quantity the customer chose
         const response = await fetch('/cart/add.js', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -61,61 +123,20 @@
           throw new Error(err.description || 'Unable to add this product to cart.');
         }
 
-        setMessage('Added to cart! Your GlowMist is waiting at checkout.', 'success');
+        // Step 2 — Check if Buy 2 Get 1 threshold is hit; bump to 3 silently
+        const bonusAdded = await applyBuy2Get1(id, quantity);
 
-        // ── Step 1: Fetch fresh cart JSON ──
-        const cartData = await fetch('/cart.js').then((r) => r.json()).catch(() => ({ item_count: quantity }));
-
-        // ── Step 2: Try Horizon's native @theme/events CartUpdateEvent ──
-        // This refreshes the drawer HTML and (if auto-open is enabled in theme
-        // settings) opens it. We attempt this first, then force-open regardless.
-        try {
-          const { CartUpdateEvent } = await import('@theme/events');
-          const event = new CartUpdateEvent(cartData, 'product-form-component', {
-            itemCount: cartData.item_count,
-            source: 'product-form-component',
-            sections: {},
-          });
-          document.dispatchEvent(event);
-        } catch (_) {
-          // @theme/events unavailable on this Horizon version — fall through
-        }
-
-        // ── Step 3: Also fire the cart:update CustomEvent ──
-        // Confirmed working on Horizon 3.0+ (Shopify dev forum, Nov 2025).
-        // The source 'product-form-component' is the magic string Horizon
-        // checks to decide whether to re-render the drawer contents.
-        document.dispatchEvent(
-          new CustomEvent('cart:update', {
-            bubbles: true,
-            detail: {
-              data: {
-                itemCount: cartData.item_count ?? quantity,
-                source: 'product-form-component',
-              },
-            },
-          })
+        // Step 3 — Show the right success message
+        setMessage(
+          bonusAdded
+            ? '\uD83C\uDF81 1 free item added! Your Buy 2 Get 1 deal is applied.'
+            : 'Added to cart! Your GlowMist is waiting at checkout.',
+          'success'
         );
 
-        // ── Step 4: Force-open the drawer unconditionally ──
-        // cartDrawer.open() normally only fires when the theme setting
-        // "auto-open cart drawer" is enabled. We bypass that check entirely
-        // and open regardless, which is what the user always wants on ATC.
-        const horizonDrawer =
-          document.querySelector('cart-drawer-component') ??
-          document.querySelector('cart-drawer');
+        // Step 4 — Refresh and open the Horizon cart drawer
+        await openHorizonDrawer();
 
-        if (horizonDrawer) {
-          // Wait one frame so Horizon's cart:update handler can inject
-          // fresh HTML into the drawer before it slides open.
-          requestAnimationFrame(() => {
-            if (typeof horizonDrawer.open === 'function') {
-              horizonDrawer.open();
-            } else {
-              horizonDrawer.open = true;
-            }
-          });
-        }
       } catch (error) {
         setMessage(error.message, 'error');
       } finally {
@@ -124,9 +145,7 @@
       }
     };
 
-    // ── FIX 3: one listener per button, all call the same shared addToCart ──
-    // (Previously each button's listener re-iterated *all* buttons, so clicking
-    // the hero button also fired the sticky button's handler → 2–3 requests.)
+    // One listener per button — all call the same shared addToCart
     buttons.forEach((btn) => {
       btn.addEventListener('click', addToCart);
     });
