@@ -360,4 +360,23 @@
   } else {
     init();
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const qtyInput = document.querySelector("[data-glowmist-quantity]");
+  const plusBtn = document.querySelector("[data-glowmist-increase]");
+  const minusBtn = document.querySelector("[data-glowmist-decrease]");
+
+  if (!qtyInput || !plusBtn || !minusBtn) return;
+
+  plusBtn.addEventListener("click", () => {
+    qtyInput.value = parseInt(qtyInput.value || 1) + 1;
+  });
+
+  minusBtn.addEventListener("click", () => {
+    const current = parseInt(qtyInput.value || 1);
+    if (current > 1) {
+      qtyInput.value = current - 1;
+    }
+  });
+});
 })();
