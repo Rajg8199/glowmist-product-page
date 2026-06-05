@@ -906,6 +906,9 @@
     gap: 28px;
     padding-top: 28px;
   }
+  .glowmist-secondary-actions {
+    justify-content: center;
+}
   .glowmist-quantity-selector input {
     width: 30px;
 }
