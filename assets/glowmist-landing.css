@@ -323,24 +323,35 @@
 }
 
 @media (max-width: 768px) {
+
   .glowmist-actions {
-    flex-direction: column;
-    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
   }
 
   .glowmist-quantity {
-    width: 100%;
+    flex: 0 0 110px;
+    width: 110px;
   }
 
   .glowmist-quantity-selector {
-    width: 100%;
+    width: 110px;
+    height: 52px;
+    padding: 0 12px;
   }
 
   .glowmist-button {
-    width: 100%;
+    flex: 1;
+    width: auto;
+    min-height: 52px;
+  }
+
+  .glowmist-quantity > span {
+    display: none;
   }
 }
-
 /* ─── CTA button ─── */
 .glowmist-button {
   appearance: none;
@@ -899,8 +910,6 @@
   .glowmist-hero h1 {
     font-size: clamp(1.75rem, 7vw, 2.5rem);
   }
-
-  .glowmist-actions,
   .glowmist-benefits,
   .glowmist-reviews,
   .glowmist-steps {
