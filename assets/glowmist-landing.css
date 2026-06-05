@@ -252,22 +252,31 @@
 .glowmist-quantity-selector {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(0,0,0,.1);
-  border-radius: 12px;
-  overflow: hidden;
-  width: fit-content;
+  justify-content: space-between;
+  width: 140px;
+  height: 52px;
+  border: 1px solid #e4d7db;
+  border-radius: 16px;
+  padding: 0 14px;
   background: #fff;
 }
 
 .glowmist-qty-btn {
-  width: 42px;
-  height: 42px;
-  border: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
   background: transparent;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 600;
   cursor: pointer;
-  transition: background .2s ease;
+  line-height: 1;
+}
+
+.glowmist-qty-display {
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
 }
 
 .glowmist-qty-btn:hover {
@@ -300,10 +309,36 @@
 }
 
 .glowmist-actions {
-  display: grid;
-  grid-template-columns: 98px minmax(0, 1fr);
-  gap: 12px;
+  display: flex;
   align-items: end;
+  gap: 12px;
+}
+
+.glowmist-quantity {
+  flex: 0 0 140px;
+}
+
+.glowmist-button {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .glowmist-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .glowmist-quantity {
+    width: 100%;
+  }
+
+  .glowmist-quantity-selector {
+    width: 100%;
+  }
+
+  .glowmist-button {
+    width: 100%;
+  }
 }
 
 /* ─── CTA button ─── */
