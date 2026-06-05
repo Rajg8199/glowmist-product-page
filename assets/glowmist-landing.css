@@ -921,9 +921,11 @@
     align-items: center;
   }
 
-  .glowmist-guarantee-strip {
-    flex-direction: column;
-  }
+.glowmist-guarantee-strip {
+    flex-direction: row;
+    display: flex;
+    font-size: 10px;
+}
 
   .glowmist-carousel-button {
     height: 36px;
