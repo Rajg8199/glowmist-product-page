@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -61,6 +62,11 @@
       "settings": {
         "media_type_1": "image",
         "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "media_type_2_mobile": "image",
+        "link": "",
         "open_in_new_tab": false,
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -277,10 +283,402 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "17826765121dc7d7c0": {
+      "type": "_blocks",
+      "blocks": {
+        "design_ai_cross_sell_fJfmDz": {
+          "type": "shopify://apps/design-ai/blocks/cross-sell/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "heading": "Complete the look",
+            "collection_handle": "automated-collection",
+            "max_items": 3
+          }
+        },
+        "design_ai_cart_progress_ka9xP8": {
+          "type": "shopify://apps/design-ai/blocks/cart-progress/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "threshold": 50,
+            "bar_color": "#000000",
+            "progress_msg": "Add [AMOUNT] more for free shipping!",
+            "success_msg": "🎉 You qualify for free shipping!"
+          }
+        },
+        "design_ai_homepage_hero_CRRNMa": {
+          "type": "shopify://apps/design-ai/blocks/homepage-hero/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "heading": "Built for the way you live",
+            "subheading": "Quality you can feel. Prices you will love.",
+            "trust_line": "Free shipping · 30-day returns · 4.8★ rating",
+            "image": "shopify://shop_images/Gemini_Generated_Image_d1w2r9d1w2r9d1w2.png",
+            "video_url": "",
+            "overlay_opacity": 25,
+            "min_height": "80vh",
+            "primary_cta_label": "Shop now",
+            "primary_cta_url": "",
+            "secondary_cta_label": "Learn more",
+            "secondary_cta_url": "",
+            "show_urgency_badge": false,
+            "urgency_text": "Limited time",
+            "text_color": "#ffffff",
+            "button_color": "#ffffff",
+            "button_text_color": "#000000"
+          }
+        },
+        "design_ai_media_gallery_fhEVWF": {
+          "type": "shopify://apps/design-ai/blocks/media-gallery/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "zoom_enabled": true,
+            "thumbnail_position": "bottom",
+            "aspect_ratio": "square"
+          }
+        },
+        "design_ai_social_proof_strip_mQGtUc": {
+          "type": "shopify://apps/design-ai/blocks/social-proof-strip/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "background_color": "#ffffff",
+            "text_color": "#1f2937",
+            "stat1_value": "50,000+",
+            "stat1_label": "Happy Customers",
+            "stat1_icon": "users",
+            "stat2_value": "4.8★",
+            "stat2_label": "Average Rating",
+            "stat2_icon": "star",
+            "stat3_value": "100%",
+            "stat3_label": "Money-Back Guarantee",
+            "stat3_icon": "shield",
+            "stat4_value": "Same Day",
+            "stat4_label": "Dispatch",
+            "stat4_icon": "lightning",
+            "show_logo_strip": false,
+            "logo_strip_text": "Forbes  ·  TechCrunch  ·  Wired  ·  Business Insider  ·  The Guardian"
+          }
+        },
+        "design_ai_sticky_atc_gbRLmn": {
+          "type": "shopify://apps/design-ai/blocks/sticky-atc/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "button_color": "#000000",
+            "button_text_color": "#ffffff",
+            "button_label": "Add to Cart"
+          }
+        }
+      },
+      "block_order": [
+        "design_ai_cross_sell_fJfmDz",
+        "design_ai_cart_progress_ka9xP8",
+        "design_ai_homepage_hero_CRRNMa",
+        "design_ai_media_gallery_fhEVWF",
+        "design_ai_social_proof_strip_mQGtUc",
+        "design_ai_sticky_atc_gbRLmn"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "17826786869bcd69a3": {
+      "type": "_blocks",
+      "blocks": {
+        "design_ai_cart_progress_y8MLX8": {
+          "type": "shopify://apps/design-ai/blocks/cart-progress/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "threshold": 50,
+            "bar_color": "#000000",
+            "progress_msg": "Add [AMOUNT] more for free shipping!",
+            "success_msg": "🎉 You qualify for free shipping!"
+          }
+        },
+        "design_ai_cross_sell_p7G4pH": {
+          "type": "shopify://apps/design-ai/blocks/cross-sell/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "heading": "Complete the look",
+            "collection_handle": "",
+            "max_items": 3
+          }
+        },
+        "design_ai_delivery_estimate_zdWzrq": {
+          "type": "shopify://apps/design-ai/blocks/delivery-estimate/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "primary_color": "#0ea5e9",
+            "show_countdown": true,
+            "cutoff_hour": 14,
+            "min_days": 3,
+            "max_days": 7,
+            "free_shipping_threshold": 0
+          }
+        },
+        "design_ai_media_gallery_Nia9Fi": {
+          "type": "shopify://apps/design-ai/blocks/media-gallery/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "zoom_enabled": true,
+            "thumbnail_position": "bottom",
+            "aspect_ratio": "square"
+          }
+        },
+        "design_ai_sos_email_capture_M7Dqna": {
+          "type": "shopify://apps/design-ai/blocks/sos-email-capture/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "layout": "inline",
+            "headline": "Get Conversion Tips in Your Inbox",
+            "subheadline": "Join 12,000+ founders who grow their stores with our weekly playbook.",
+            "show_name_field": false,
+            "placeholder_email": "Enter your email",
+            "placeholder_name": "Your first name",
+            "submit_label": "Subscribe Free",
+            "success_message": "You're in! Check your inbox.",
+            "bg_color": "#6366f1",
+            "text_color": "#ffffff",
+            "accent_color": "#000000",
+            "input_bg": "#ffffff",
+            "padding_top": 80,
+            "padding_bottom": 80
+          }
+        },
+        "design_ai_sos_faq_JMV7q6": {
+          "type": "shopify://apps/design-ai/blocks/sos-faq/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "layout": "accordion",
+            "headline": "Frequently Asked Questions",
+            "subheadline": "Everything you need to know.",
+            "q1": "How long does setup take?",
+            "a1": "Most stores are up and running in under 15 minutes. Just install the app, add blocks to your theme, and you're live.",
+            "q2": "Does it work with my theme?",
+            "a2": "Yes — StoreOS Blocks uses Shopify's Theme App Extension system, so it works with any Online Store 2.0 compatible theme without touching your theme code.",
+            "q3": "Will it slow down my store?",
+            "a3": "No. All blocks are built for performance. CSS is loaded once via a single stylesheet and scripts are scoped to each block so they never conflict.",
+            "q4": "Can I customize colors and fonts?",
+            "a4": "Absolutely. Every block exposes color, spacing, and layout settings in the theme editor. No code required.",
+            "q5": "Is there a free trial?",
+            "a5": "Yes, all plans include a 14-day free trial. No credit card required to start.",
+            "q6": "How do I cancel my subscription?",
+            "a6": "You can cancel anytime from your Shopify admin under Apps. Your blocks will stop rendering after the billing period ends.",
+            "q7": "Do you offer support?",
+            "a7": "Yes — we offer live chat and email support on all plans. Priority support is included on the Pro and Growth plans.",
+            "q8": "Can I use the blocks on multiple stores?",
+            "a8": "Each subscription covers one store. If you need multi-store access, contact us about our agency plan.",
+            "bg_color": "#ffffff",
+            "text_color": "#111827",
+            "accent_color": "#6366f1",
+            "padding_top": 80,
+            "padding_bottom": 80
+          }
+        },
+        "design_ai_sos_pricing_cWFNFL": {
+          "type": "shopify://apps/design-ai/blocks/sos-pricing/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "layout": "three-col",
+            "headline": "Simple, Transparent Pricing",
+            "subheadline": "No hidden fees. Cancel anytime.",
+            "plan1_name": "Starter",
+            "plan1_price": "$9",
+            "plan1_period": "/ month",
+            "plan1_desc": "Perfect for new stores.",
+            "plan1_features": "Up to 500 orders/mo\n5 blocks\nEmail support",
+            "plan1_cta": "Get Started",
+            "plan1_cta_url": "",
+            "plan2_name": "Pro",
+            "plan2_price": "$29",
+            "plan2_period": "/ month",
+            "plan2_desc": "For growing stores that need more power.",
+            "plan2_features": "Unlimited orders\nAll blocks\nPriority support\nA/B testing\nAnalytics",
+            "plan2_cta": "Start Free Trial",
+            "plan2_cta_url": "",
+            "plan2_badge": "Most Popular",
+            "plan2_featured": true,
+            "plan3_name": "Growth",
+            "plan3_price": "$79",
+            "plan3_period": "/ month",
+            "plan3_desc": "For scaling brands needing dedicated support.",
+            "plan3_features": "Everything in Pro\nMulti-store\nDedicated manager\nCustom blocks\nSLA guarantee",
+            "plan3_cta": "Contact Sales",
+            "plan3_cta_url": "",
+            "bg_color": "#f9fafb",
+            "text_color": "#111827",
+            "accent_color": "#6366f1",
+            "card_bg": "#ffffff",
+            "featured_bg": "#6366f1",
+            "featured_text": "#ffffff",
+            "padding_top": 96,
+            "padding_bottom": 96
+          }
+        },
+        "design_ai_sos_features_mq3Chk": {
+          "type": "shopify://apps/design-ai/blocks/sos-features/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "layout": "icons-grid",
+            "headline": "Everything You Need to Succeed",
+            "subheadline": "Built-in tools that grow with your business.",
+            "feature_1_icon": "⚡",
+            "feature_1_title": "Lightning Fast",
+            "feature_1_desc": "Optimized for speed from the ground up. Every interaction feels instant, every page loads in milliseconds.",
+            "feature_2_icon": "🎨",
+            "feature_2_title": "Beautiful by Default",
+            "feature_2_desc": "Professionally designed templates that look stunning out of the box, fully customizable to your brand.",
+            "feature_3_icon": "📱",
+            "feature_3_title": "Mobile First",
+            "feature_3_desc": "Every section is built responsive from day one — perfect on phones, tablets, and desktops.",
+            "feature_4_icon": "🔒",
+            "feature_4_title": "Secure & Reliable",
+            "feature_4_desc": "Enterprise-grade security baked in. Your store and your customers' data are always protected.",
+            "feature_5_icon": "📊",
+            "feature_5_title": "Deep Analytics",
+            "feature_5_desc": "Understand what drives conversions with built-in analytics dashboards and actionable insights.",
+            "feature_6_icon": "🤝",
+            "feature_6_title": "World-Class Support",
+            "feature_6_desc": "A dedicated team ready to help you succeed. Real humans, fast replies, no ticketing runaround.",
+            "card_bg": "#f9fafb",
+            "bg_color": "#ffffff",
+            "text_color": "#111827",
+            "accent_color": "#6366f1",
+            "padding_top": 96,
+            "padding_bottom": 96
+          }
+        },
+        "design_ai_sos_testimonials_aGFRMK": {
+          "type": "shopify://apps/design-ai/blocks/sos-testimonials/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "layout": "grid",
+            "headline": "What Our Customers Say",
+            "t1_quote": "This app transformed our conversion rate overnight.",
+            "t1_name": "Sarah Mitchell",
+            "t1_title": "Founder, Bloom Botanicals",
+            "t1_rating": 5,
+            "t2_quote": "Setup took 10 minutes. Bounce rate dropped immediately.",
+            "t2_name": "James Okafor",
+            "t2_title": "CEO, Drift Athletic",
+            "t2_rating": 5,
+            "t3_quote": "Exactly the trust signals our cart page was missing.",
+            "t3_name": "Priya Nair",
+            "t3_title": "Head of Growth, Velvet Home",
+            "t3_rating": 5,
+            "t4_quote": "Blocks outperformed our old theme sections in every A/B test.",
+            "t4_name": "Tom Reyes",
+            "t4_title": "eCommerce Manager, Kova Supply",
+            "t4_rating": 5,
+            "t5_quote": "Repeat purchase rate up 22% after adding the cross-sell block.",
+            "t5_name": "Layla Hassan",
+            "t5_title": "Owner, Zara Luxe Candles",
+            "t5_rating": 5,
+            "t6_quote": "Stunning on mobile. Support team is phenomenal.",
+            "t6_name": "Daniel Park",
+            "t6_title": "Co-founder, Apex Outdoors",
+            "t6_rating": 5,
+            "bg_color": "#f9fafb",
+            "text_color": "#111827",
+            "accent_color": "#6366f1",
+            "card_bg": "#ffffff",
+            "padding_top": 96,
+            "padding_bottom": 96
+          }
+        },
+        "design_ai_social_proof_strip_fYitmr": {
+          "type": "shopify://apps/design-ai/blocks/social-proof-strip/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "background_color": "#ffffff",
+            "text_color": "#1f2937",
+            "stat1_value": "50,000+",
+            "stat1_label": "Happy Customers",
+            "stat1_icon": "users",
+            "stat2_value": "4.8★",
+            "stat2_label": "Average Rating",
+            "stat2_icon": "star",
+            "stat3_value": "100%",
+            "stat3_label": "Money-Back Guarantee",
+            "stat3_icon": "shield",
+            "stat4_value": "Same Day",
+            "stat4_label": "Dispatch",
+            "stat4_icon": "lightning",
+            "show_logo_strip": false,
+            "logo_strip_text": "Forbes  ·  TechCrunch  ·  Wired  ·  Business Insider  ·  The Guardian"
+          }
+        },
+        "design_ai_trust_module_jjH7JL": {
+          "type": "shopify://apps/design-ai/blocks/trust-module/019f0fa8-f173-7f51-ac22-60bd96f69d19",
+          "settings": {
+            "icon_color": "#374151",
+            "text_color": "#374151",
+            "show_secure": true,
+            "secure_label": "Secure checkout",
+            "show_shipping": true,
+            "shipping_label": "Free shipping over $50",
+            "show_returns": true,
+            "returns_label": "30-day free returns",
+            "show_support": false,
+            "support_label": "24/7 customer support",
+            "show_guarantee": true,
+            "guarantee_text": "100% satisfaction guarantee or your money back."
+          }
+        }
+      },
+      "block_order": [
+        "design_ai_cart_progress_y8MLX8",
+        "design_ai_cross_sell_p7G4pH",
+        "design_ai_delivery_estimate_zdWzrq",
+        "design_ai_media_gallery_Nia9Fi",
+        "design_ai_sos_email_capture_M7Dqna",
+        "design_ai_sos_faq_JMV7q6",
+        "design_ai_sos_pricing_cWFNFL",
+        "design_ai_sos_features_mq3Chk",
+        "design_ai_sos_testimonials_aGFRMK",
+        "design_ai_social_proof_strip_fYitmr",
+        "design_ai_trust_module_jjH7JL"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "17826765121dc7d7c0",
+    "17826786869bcd69a3"
   ]
 }
