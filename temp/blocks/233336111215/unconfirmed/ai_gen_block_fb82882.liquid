@@ -1,6 +1,527 @@
+{% doc %}
+  @prompt
+    Create a "Trust Bar" theme section for a Shopify Online Store 2.0 theme. The section should display a horizontal strip of 3 customizable trust badges (e.g., Free Shipping, 30-Day Returns, Secure Checkout). Each badge should have an optional SVG icon, a short headline, and an optional subtext. The section should be fully customizable via the theme editor (badge text, subtext, icon choice or upload, background color, text color). It should be responsive — stacking vertically on mobile and displaying inline on desktop. Use scoped CSS class names prefixed with "trust-bar__" to avoid conflicts with existing theme styles. The section should support being placed anywhere in the theme (header, above footer, on product pages, etc.).
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .trust-bar__container-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+  }
+
+  .trust-bar__wrapper-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: {{ block.settings.badge_spacing }}px;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .trust-bar__badge-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trust-bar__icon-wrapper-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+  }
+
+  .trust-bar__icon-wrapper-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.icon_color }};
+  }
+
+  .trust-bar__custom-icon-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .trust-bar__headline-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.headline_size }}px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .trust-bar__subtext-{{ ai_gen_id }} {
+    color: {{ block.settings.subtext_color }};
+    font-size: {{ block.settings.subtext_size }}px;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  @media screen and (max-width: 749px) {
+    .trust-bar__wrapper-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: {{ block.settings.badge_spacing_mobile }}px;
+    }
+
+    .trust-bar__badge-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .trust-bar__icon-wrapper-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size_mobile }}px;
+      height: {{ block.settings.icon_size_mobile }}px;
+    }
+
+    .trust-bar__headline-{{ ai_gen_id }} {
+      font-size: {{ block.settings.headline_size_mobile }}px;
+    }
+
+    .trust-bar__subtext-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subtext_size_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="trust-bar__container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="trust-bar__wrapper-{{ ai_gen_id }}">
+    {% for i in (1..3) %}
+      {% liquid
+        assign badge_enabled_key = 'badge_' | append: i | append: '_enabled'
+        assign badge_icon_key = 'badge_' | append: i | append: '_icon'
+        assign badge_custom_icon_key = 'badge_' | append: i | append: '_custom_icon'
+        assign badge_headline_key = 'badge_' | append: i | append: '_headline'
+        assign badge_subtext_key = 'badge_' | append: i | append: '_subtext'
+
+        assign badge_enabled = block.settings[badge_enabled_key]
+        assign badge_icon = block.settings[badge_icon_key]
+        assign badge_custom_icon = block.settings[badge_custom_icon_key]
+        assign badge_headline = block.settings[badge_headline_key]
+        assign badge_subtext = block.settings[badge_subtext_key]
+      %}
+
+      {% if badge_enabled %}
+        <div class="trust-bar__badge-{{ ai_gen_id }}">
+          {% if badge_custom_icon != blank %}
+            <div class="trust-bar__icon-wrapper-{{ ai_gen_id }}">
+              <img
+                src="{{ badge_custom_icon | image_url: width: 100 }}"
+                alt="{{ badge_headline | escape }}"
+                class="trust-bar__custom-icon-{{ ai_gen_id }}"
+                loading="lazy"
+                width="100"
+                height="100"
+              >
+            </div>
+          {% elsif badge_icon != 'none' %}
+            <div class="trust-bar__icon-wrapper-{{ ai_gen_id }}">
+              {% if badge_icon == 'shipping' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+              {% elsif badge_icon == 'returns' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+              {% elsif badge_icon == 'secure' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              {% elsif badge_icon == 'support' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              {% elsif badge_icon == 'quality' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+              {% elsif badge_icon == 'warranty' %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if badge_headline != blank %}
+            <h3 class="trust-bar__headline-{{ ai_gen_id }}">{{ badge_headline }}</h3>
+          {% endif %}
+
+          {% if badge_subtext != blank %}
+            <p class="trust-bar__subtext-{{ ai_gen_id }}">{{ badge_subtext }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Trust bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "badge_spacing",
+      "label": "Badge spacing (desktop)",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "badge_spacing_mobile",
+      "label": "Badge spacing (mobile)",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Headline",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size (desktop)",
+      "min": 20,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Icon size (mobile)",
+      "min": 20,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "headline_size",
+      "label": "Headline size (desktop)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "headline_size_mobile",
+      "label": "Headline size (mobile)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "subtext_size",
+      "label": "Subtext size (desktop)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "subtext_size_mobile",
+      "label": "Subtext size (mobile)",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_1_enabled",
+      "label": "Enable badge 1",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "badge_1_icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        },
+        {
+          "value": "secure",
+          "label": "Secure"
+        },
+        {
+          "value": "support",
+          "label": "Support"
+        },
+        {
+          "value": "quality",
+          "label": "Quality"
+        },
+        {
+          "value": "warranty",
+          "label": "Warranty"
+        }
+      ],
+      "default": "shipping"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_1_custom_icon",
+      "label": "Custom icon",
+      "info": "Overrides icon selection above"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_headline",
+      "label": "Headline",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "text",
+      "id": "badge_1_subtext",
+      "label": "Subtext",
+      "default": "On orders over $50"
+    },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_2_enabled",
+      "label": "Enable badge 2",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "badge_2_icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        },
+        {
+          "value": "secure",
+          "label": "Secure"
+        },
+        {
+          "value": "support",
+          "label": "Support"
+        },
+        {
+          "value": "quality",
+          "label": "Quality"
+        },
+        {
+          "value": "warranty",
+          "label": "Warranty"
+        }
+      ],
+      "default": "returns"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_2_custom_icon",
+      "label": "Custom icon",
+      "info": "Overrides icon selection above"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_headline",
+      "label": "Headline",
+      "default": "30-Day Returns"
+    },
+    {
+      "type": "text",
+      "id": "badge_2_subtext",
+      "label": "Subtext",
+      "default": "Hassle-free returns"
+    },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_3_enabled",
+      "label": "Enable badge 3",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "badge_3_icon",
+      "label": "Icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        },
+        {
+          "value": "secure",
+          "label": "Secure"
+        },
+        {
+          "value": "support",
+          "label": "Support"
+        },
+        {
+          "value": "quality",
+          "label": "Quality"
+        },
+        {
+          "value": "warranty",
+          "label": "Warranty"
+        }
+      ],
+      "default": "secure"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_3_custom_icon",
+      "label": "Custom icon",
+      "info": "Overrides icon selection above"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_headline",
+      "label": "Headline",
+      "default": "Secure Checkout"
+    },
+    {
+      "type": "text",
+      "id": "badge_3_subtext",
+      "label": "Subtext",
+      "default": "SSL encrypted payment"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar"
+    }
+  ]
+}
 {% endschema %}
