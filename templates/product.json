@@ -384,6 +384,7 @@
           "settings": {
             "atc_text": "Add to cart",
             "soldout_text": "Sold out",
+            "show_icon": false,
             "show_dynamic_checkout": true
           }
         },
@@ -458,6 +459,10 @@
       ],
       "name": "PDP Dynamic",
       "settings": {
+        "design_style": "minimal",
+        "title_font": "funnel_display_n4",
+        "reveal_on_load": true,
+        "gallery_glow": true,
         "max_width": 1300,
         "media_width": 55,
         "media_position": "left",
@@ -468,6 +473,7 @@
         "show_thumbs": true,
         "thumb_position": "below-scroll",
         "thumb_size": 76,
+        "show_counter": true,
         "image_ratio": "1/1",
         "accent_color": "#111111",
         "accent_text_color": "#ffffff",
