@@ -296,6 +296,7 @@
         "trust_badge_p789Tm",
         "trust_badge_6t3edY"
       ],
+      "disabled": true,
       "name": "GlowMist hero",
       "settings": {
         "product": "hydrating-face-mist",
@@ -316,6 +317,172 @@
         "color_ink": "#33232a",
         "color_muted": "#6d5961",
         "color_cream": "#fff8f6"
+      }
+    },
+    "pdp_BEFjbx": {
+      "type": "pdp",
+      "blocks": {
+        "vendor_cHidqk": {
+          "type": "vendor",
+          "settings": {
+            "link_vendor": false
+          }
+        },
+        "title_MVWWxM": {
+          "type": "title",
+          "settings": {}
+        },
+        "rating_833ArW": {
+          "type": "rating",
+          "settings": {
+            "rating_metafield": "reviews.rating",
+            "count_metafield": "reviews.rating_count",
+            "reviews_label": "reviews"
+          }
+        },
+        "price_rnwkfq": {
+          "type": "price",
+          "settings": {
+            "show_save": true,
+            "save_as": "percent",
+            "save_label": "Save",
+            "tax_note": ""
+          }
+        },
+        "usp_list_jkxYgq": {
+          "type": "usp_list",
+          "settings": {
+            "items": "Free shipping over $50\nHassle-free 30-day returns\nEthically made"
+          }
+        },
+        "variant_picker_YxhKJC": {
+          "type": "variant_picker",
+          "settings": {
+            "style": "pills",
+            "color_swatches": true
+          }
+        },
+        "quantity_7FdXXq": {
+          "type": "quantity",
+          "settings": {
+            "show_label": true,
+            "label": "Quantity"
+          }
+        },
+        "inventory_yqqAMx": {
+          "type": "inventory",
+          "settings": {
+            "low_threshold": 10,
+            "show_count": true,
+            "in_text": "In stock, ready to ship",
+            "low_text": "Only a few left",
+            "out_text": "Out of stock"
+          }
+        },
+        "buy_buttons_j3h8z4": {
+          "type": "buy_buttons",
+          "settings": {
+            "atc_text": "Add to cart",
+            "soldout_text": "Sold out",
+            "show_dynamic_checkout": true
+          }
+        },
+        "trust_badges_Nf93rJ": {
+          "type": "trust_badges",
+          "settings": {
+            "heading": "Guaranteed safe checkout",
+            "payment_icons": "visa, master, american_express, paypal, apple_pay, shopify_pay",
+            "subtext": "Encrypted & secure payments"
+          }
+        },
+        "icon_with_text_eJtMLt": {
+          "type": "icon_with_text",
+          "settings": {
+            "icon": "truck",
+            "heading": "Free shipping",
+            "text": "On all orders over $50"
+          }
+        },
+        "shipping_estimate_mXLejJ": {
+          "type": "shipping_estimate",
+          "settings": {
+            "prefix": "Estimated delivery",
+            "min_days": 3,
+            "max_days": 7
+          }
+        },
+        "pickup_piN4Jy": {
+          "type": "pickup",
+          "settings": {
+            "heading": "Free store pickup",
+            "text": "Usually ready in 24 hours"
+          }
+        },
+        "description_nHCHWm": {
+          "type": "description",
+          "settings": {}
+        },
+        "collapsible_LrqV7K": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Describe your shipping and returns policy.</p>",
+            "page": "",
+            "open_default": false
+          }
+        },
+        "share_KxxxYb": {
+          "type": "share",
+          "settings": {
+            "label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "vendor_cHidqk",
+        "title_MVWWxM",
+        "rating_833ArW",
+        "price_rnwkfq",
+        "usp_list_jkxYgq",
+        "variant_picker_YxhKJC",
+        "quantity_7FdXXq",
+        "inventory_yqqAMx",
+        "buy_buttons_j3h8z4",
+        "trust_badges_Nf93rJ",
+        "icon_with_text_eJtMLt",
+        "shipping_estimate_mXLejJ",
+        "pickup_piN4Jy",
+        "description_nHCHWm",
+        "collapsible_LrqV7K",
+        "share_KxxxYb"
+      ],
+      "name": "PDP Dynamic",
+      "settings": {
+        "max_width": 1300,
+        "media_width": 55,
+        "media_position": "left",
+        "column_gap": 48,
+        "sticky_media": true,
+        "padding_top": 40,
+        "padding_bottom": 48,
+        "show_thumbs": true,
+        "thumb_position": "below-scroll",
+        "thumb_size": 76,
+        "image_ratio": "1/1",
+        "accent_color": "#111111",
+        "accent_text_color": "#ffffff",
+        "text_color": "#1a1a1a",
+        "bg_color": "#ffffff",
+        "sale_color": "#d1301a",
+        "corner_radius": 12,
+        "title_size": 34,
+        "price_size": 26,
+        "mobile_sticky_atc": true,
+        "sticky_atc_text": "Add to cart",
+        "atc_default": "Add to cart",
+        "soldout_text": "Sold out",
+        "unavailable_text": "Unavailable",
+        "emit_view_item": true
       }
     },
     "glowmist_benefits_the6qB": {
@@ -574,6 +741,7 @@
   "order": [
     "main",
     "glowmist_hero_HiM9jf",
+    "pdp_BEFjbx",
     "glowmist_benefits_the6qB",
     "17805964327c0ef360",
     "glowmist_ingredients_dwCWre",
