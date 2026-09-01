@@ -4,6 +4,8 @@
   lang="{{ request.locale.iso_code }}"
 >
   <head>
+{% render 'visually_io_sdk' %}
+
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"
